@@ -1,0 +1,8 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Name of folder</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </form>
+  

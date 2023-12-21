@@ -1,0 +1,13 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Ajustez ce padding selon vos besoins */
+  
+    .mat-form-field {
+      width: 100%; /* Assurez-vous que la largeur ne dépasse pas la largeur du dialogue */
+      margin-bottom: 15px;
+    }
+  }
+  

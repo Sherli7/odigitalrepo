@@ -1,0 +1,34 @@
+/* CSS personnalisé pour le formulaire */
+.custom-form {
+    /* Ajoutez ici vos styles personnalisés pour le formulaire */
+    margin: 20px auto; /* Pour centrer le formulaire horizontalement */
+    padding: 20px;
+    background-color: #f0f0f0;
+    text-align: center; /* Pour centrer le bouton */
+  }
+  
+  /* CSS personnalisé pour le champ de formulaire */
+  .custom-form-field {
+    /* Ajoutez ici vos styles personnalisés pour le champ de formulaire */
+    width: 100%;
+    border: none; /* Pour supprimer la bordure */
+  }
+  
+  /* CSS personnalisé pour la zone de texte */
+  .custom-textarea {
+    /* Ajoutez ici vos styles personnalisés pour la zone de texte */
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+    border: none; /* Pour supprimer la bordure */
+  }
+  
+  /* CSS personnalisé pour le bouton */
+  .custom-button {
+    /* Ajoutez ici vos styles personnalisés pour le bouton */
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none; /* Pour supprimer la bordure */
+  }
+  

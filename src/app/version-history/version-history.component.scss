@@ -1,0 +1,40 @@
+/* repository.component.scss */
+.document-properties-card {
+    max-width: 400px;
+    margin: auto;
+  
+    .property-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+  
+    .property-label {
+      font-weight: bold;
+    }
+  
+    .property-value {
+      text-align: right;
+    }
+  
+    mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  
+
+  /* update-file-dialog.component.scss */
+.form-element {
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.example-full-width {
+  width: 100%;
+}

@@ -1,0 +1,30 @@
+  <div class="login-container">
+    <div class="login-content" [ngStyle]="{'background-image': 'url(../../../assets/img/maarch.jpg)'}">
+      <div class="login-form">
+        <img src="../../../assets/img/Odigital.png" class="maarchLogo">
+        <p style="color: white;font-size: 24px;font-weight: bold;">O'DIGITAL WORKSPACE</p>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" >
+          <div class="input-container">
+            <mat-form-field class="input-row login" appearance="outline">
+              <input autofocus matInput placeholder="Identifiant" formControlName="userId" type="text">
+            </mat-form-field>
+            <mat-form-field class="input-row" appearance="outline">
+              <input matInput placeholder="Mot de passe" [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password" autocomplete="off">
+              <button type="button" matSuffix mat-icon-button (click)="hidePassword = !hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-hint align="end"><a
+                style="cursor: pointer;" class="infoLogin">Mot de passe oublié ?</a></mat-hint>
+            </mat-form-field>
+          </div>
+          <button type="submit" mat-stroked-button [disabled]="loginForm.invalid"
+          style="color: white;border-color: #24b0ed;background: #24b0ed;">Se connecter</button>
+        </form>
+      </div>
+      <footer style="padding: 8px; backdrop-filter: blur(8px)">
+        <p style="color: white;cursor: default">O'DIGITAL WORKSPACE 2023</p>
+    </footer>
+    </div>
+  </div>
+  
