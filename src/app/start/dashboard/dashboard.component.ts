@@ -2,74 +2,55 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UploadPopupComponent } from '../../modal/upload-popup/upload-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthServiceService } from '../../service/auth-service.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { FolderDialogComponent } from '../../folder-dialog/folder-dialog.component';
-export interface Section {
-  name: string;
-  icon: string;
-  routerLink: string;
-  action?: () => void;
-  color:string
-}
+import { NodeService } from '../../service/node.service';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit{
-  folders: Section[] = [
-    {
-      name: 'home',
-      icon: 'home',
-      routerLink:'/dashboard/home',
-      color:'#f8f9fa'
-    },
-    {
-      name: 'Repository',
-      icon: 'folder',
-      routerLink:'/dashboard/repository',
-      color:'#f8f9fa'
-    },
-    {
-      name: 'My files',
-      icon: 'folder_special',
-      routerLink:'/dashboard/myfiles',
-      color:'#f8f9fa'
-    },
-    {
-      name: 'Shared',
-      icon: 'share',
-      routerLink:'/dashboard/shared',
-      color:'#f8f9fa'
-    },
-    {
-      name: 'New folder',
-      icon: 'create_new_folder',
-      routerLink: '',
-      action: () => this.OpenFolderFormpopup(),
-      color:'#f8f9fa'
-    },
-    {
-      name: 'Import a file',
-      icon: 'cloud_download',
-      routerLink:'',
-      action: () => this.OpenUploadpopup(),
-      color:'#f8f9fa'
-    },
-  ];
+  searchTerm: string = '';
   title='';
   showFiller = false;
+  userId!:string;
   opened=true;
-  constructor(private dialog:MatDialog,private auth:AuthServiceService,private route:Router){
+  searchResults: any;
+  constructor(private dialog:MatDialog,private auth:AuthServiceService,private route:Router,
+    private node:NodeService){
+      this.route.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event: any) => {
+        localStorage.setItem('lastRoute', event.url);
+      });
   }
   ngOnInit(): void {
-    this.auth.validateTicket();
+  this.userId=localStorage.getItem("userId")||'';
+  this.node.searchFullText('etat').subscribe(
+    data => {
+      this.searchResults = data;
+      console.log(this.searchResults);
+    },
+    error => {
+      console.error('Erreur lors de la recherche', error);
+    }
+  );
   }
 
   titleChange(title:string){
     this.title=title;
   }
 
+  performSearch() {
+    if (this.searchTerm) {
+      // Appel de la méthode de recherche ici
+      console.log('Recherche en cours pour:', this.searchTerm);
+      // Par exemple : this.nodeService.searchNodes(this.searchTerm).subscribe(...)
+    }
+  }
+  
   OpenUploadpopup(){
    var _popup= this.dialog.open(UploadPopupComponent,{
       width:'80%',
@@ -86,8 +67,8 @@ export class DashboardComponent implements OnInit{
 
   OpenFolderFormpopup(){
     var _popup= this.dialog.open(FolderDialogComponent,{
-       width: '40%',
-       height:'auto',
+      width: '20%',
+      height:'30%',
        data:{name:'Create new folder'}
      });
      _popup.afterClosed().subscribe(item=>{
@@ -103,11 +84,6 @@ export class DashboardComponent implements OnInit{
   }
   
 
-  isUserLoggedIn() {
-    if(localStorage.getItem('token')?.toString==null){
-      this.route.navigate(['login']);
-    }
-  }
   
   
   signout() {

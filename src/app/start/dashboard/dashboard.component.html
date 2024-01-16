@@ -1,11 +1,64 @@
-<mat-toolbar color="primary">
+<div class="dashboard">
+  <div class="sidebar">
+    <div class="sidebar">
+      <div class="sidebar-item active" routerLink="/dashboard/home">
+        <span class="material-icons">home</span>
+        <span>Home</span>
+    </div>
+    <div class="sidebar-item" routerLink="/dashboard/repository">
+        <span class="material-icons">folder</span>
+        <span>Repository</span>
+    </div>
+    <div class="sidebar-item" routerLink="/dashboard/myfiles">
+      <span class="material-icons">folder_shared</span>
+        <span>My file</span>
+    </div>
+    <div class="sidebar-item" routerLink="/dashboard/shared">
+      <span class="material-icons">share</span>
+      <span>Shared</span>
+  </div>
+  <div class="sidebar-item" routerLink="/dashboard/trashcan">
+    <span class="material-icons">recycling</span>
+    <span>Trash</span>
+</div>
+    <mat-divider></mat-divider>
+    <div class="sidebar-item">
+        <span class="material-icons">account_circle</span>
+        <span>{{userId}}</span>
+    </div>
+    <div class="sidebar-item" (click)="logout()">
+      <span class="material-icons">logout</span>
+      <span>Déconnexion</span>
+  </div>
+    </div>
+  </div>
+  <div class="search-bar-container">
+    <div class="search-bar">
+      <input type="search" placeholder="Search...">
+      <button class="button" (click)="OpenFolderFormpopup()"><span class="material-icons">add</span>Add New</button>
+      <button class="button" (click)="OpenUploadpopup()"><span class="material-icons">file_upload</span>Upload</button>
+    </div>
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+
+<!-- <mat-toolbar color="primary">
   <mat-toolbar-row>
     <h5>O'DIGITAL</h5>
-    <button mat-button (click)="opened=!opened"><mat-icon>menu</mat-icon></button>
+    <button mat-icon-button (click)="opened=!opened"><mat-icon>menu</mat-icon></button>
+    <span class="example-spacer"></span>    
+    <div class="example-button-container">
+      <button mat-mini-fab color="accent" (click)="logout()" aria-label="Example icon button with a logout icon">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav [(opened)]="opened" mode="side">
+  <mat-sidenav [(opened)]="opened" mode="side" class="sidenav">
     <mat-nav-list>
       <div *ngFor="let folder of folders">
         <mat-list-item [style.background]="folder.color" (click)="folder.action ? folder.action() : titleChange(folder.name)" [routerLink]="folder.routerLink ? folder.routerLink : null">
@@ -13,12 +66,13 @@
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
-      <mat-list-item style="background-color: #8ecae6;" routerLink="/dashboard/account" (click)="titleChange('account');logout()">
-        <mat-icon style="margin-bottom: -6px;">account_circle</mat-icon>account
+      <mat-list-item style="background-color: #8ecae6;" routerLink="/dashboard/account" (click)="titleChange('account');">
+      <mat-icon style="margin-bottom: -6px;">account_circle</mat-icon>Account
+
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container> -->

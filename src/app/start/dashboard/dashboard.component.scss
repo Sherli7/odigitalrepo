@@ -1,14 +1,92 @@
-.mat-sidenav-container{
-  height: calc(205vh - 115vh);
+.dashboard {
+  display: flex;
+  height: 100%;
 }
-
-mat-sidenav{
+.sidebar {
   width: 200px;
   background-color: #fff;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.sidebar-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.sidebar-item.active {
+  background-color: #82b435;
+  color: #fff;
+}
+.sidebar-item .material-icons {
+  margin-right: 10px;
+}
+.main-content {
+  margin-left: 250px; /* Adjusted to prevent overlap with the fixed sidebar */
+  padding-top: 110px; /* Adjusted to prevent overlap with the fixed search bar */
+  width: calc(100% - 200px); /* Adjusted to account for sidebar width */
 }
 
-.foot{
-  flex: 1 1 auto;
+.search-bar-container {
+  position: fixed;
+  top: 0;
+  left: 250px; /* Adjusted to align with the main content area */
+  width: calc(100% - 200px); /* Adjusted to fill the remaining width */
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000; /* Ensures it stays on top of other content */
 }
 
+.search-bar {
+  justify-content: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-radius: 1px;
+  //box-shadow: 2px 2px 5px rgba(91, 91, 91, 0.1);
+}
+.search-bar input {
+  flex-grow: 0.5; /* Reduce the growth factor */
+  max-width: 350px; /* Or set a maximum width */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: white;
+  background-color: #82b435;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button .material-icons {
+  margin-right: 8px;
+}
+.button:hover {
+  background-color: #144323;
+}
+
+.sidebar-item:hover{
+  color: #fff;
+  background-color: #144323;
+}
+.file-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+}

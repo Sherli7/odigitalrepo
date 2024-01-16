@@ -25,6 +25,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { VersionHistoryComponent } from './version-history/version-history.component';
 import { FolderDialogComponent } from './folder-dialog/folder-dialog.component';
 import { CommentDialogComponent } from './comment-dialog/comment-dialog.component';
+import { TrashcanComponent } from './trashcan/trashcan.component';
+import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -56,6 +58,8 @@ export const MY_DATE_FORMATS = {
     VersionHistoryComponent,
     FolderDialogComponent,
     CommentDialogComponent,
+    TrashcanComponent,
+    CustomSnackbarComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [

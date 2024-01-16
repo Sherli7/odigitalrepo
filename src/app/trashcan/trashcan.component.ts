@@ -1,18 +1,19 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { NodeService } from '../../service/node.service';
-import { AuthServiceService } from '../../service/auth-service.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AbstractRepositoryComponent } from '../AbstractRepositoryComponent';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AbstractRepositoryComponent } from '../../AbstractRepositoryComponent';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { AuthServiceService } from '../service/auth-service.service';
+import { NodeService } from '../service/node.service';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { CustumSnackbarService } from '../custom-snackbar/custum-snackbar.service';
 
 @Component({
-  selector: 'app-shared',
-  templateUrl: './shared.component.html',
-  styleUrl: './shared.component.scss'
+  selector: 'app-trashcan',
+  templateUrl: './trashcan.component.html',
+  styleUrl: './trashcan.component.scss'
 })
-export class SharedComponent extends AbstractRepositoryComponent {
+export class TrashcanComponent extends AbstractRepositoryComponent{
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
@@ -24,17 +25,13 @@ export class SharedComponent extends AbstractRepositoryComponent {
     protected override auth: AuthServiceService,
     protected override router: Router,
     protected override cdr: ChangeDetectorRef,
+    public _snackbar:CustumSnackbarService
   ) {
     super(sanitizer, dialog, nodeService, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit(); // Assurez-vous d'appeler la méthode ngOnInit de la classe de base
-    this.showFolder();
-  }
-
   showFolder(): void {
-    this.nodeService.getFolderShared().subscribe(
+    this.nodeService.getDeleteNode().subscribe(
       (data: any) => {
         this.currentNode = data['list'].entries;
         this.count = data['list'].pagination;
@@ -56,6 +53,12 @@ export class SharedComponent extends AbstractRepositoryComponent {
       }
     );
   }
+
+  override ngOnInit(): void {
+    super.ngOnInit(); // Assurez-vous d'appeler la méthode ngOnInit de la classe de base
+    this.showFolder();
+  }
+
 
   override findChildren(nodeid: string): void {
     localStorage.setItem("currentNodeId", nodeid);
@@ -86,4 +89,28 @@ export class SharedComponent extends AbstractRepositoryComponent {
       }
     );
   }
+
+  restoreDeletedNode(nodeId:string,name:string){
+    this.nodeService.restoreDeletedNode(nodeId).subscribe((res:any)=>{
+     const message='suppression de '+name +' réussi!';
+     const action='Okay';
+        this._snackbar.openInfoSnakbar(message,action); 
+    });
+  }
+
+  openSuccessSnackBar() {
+    const snackBarConfig: MatSnackBarConfig = {
+      duration: 130000,
+      data: { name: this.messagerror },
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['custom-snackbar'] // Utilisez la classe CSS personnalisée ici
+    };
+  
+  }
+    openFailureSnackBar(){
+
+    }
+  
+
 }

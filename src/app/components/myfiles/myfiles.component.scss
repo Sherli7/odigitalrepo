@@ -1,70 +1,74 @@
-/* repository.component.scss */
+.fixed-header {
+  position: fixed;
+  top: 110px; /* Adjusted as per your requirement */
+  left: 250px; /* Adjusted as per your requirement */
+  width: calc(100% - 250px); /* Adjusted to take the sidebar into account */
+  background: #fff;
+  padding-bottom: 5px;
+  margin-bottom: 100px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
 
-.card-0x {
-    position: relative;
-    padding: 16px; // Ajoutez un padding pour éviter que le contenu touche les bords de la carte.
-    
-    .back {  
-      position: absolute;
-      top: 8px; // Ajustez selon vos besoins pour le positionnement vertical.
-      left: 8px; // Ajustez selon vos besoins pour le positionnement horizontal.
-      mat-icon {
-        vertical-align: middle;
-        margin-right: 8px;
-      }                  
-    }                       
-                    
-    .racine {
-      padding-left: 48px; // Ajustez cette valeur pour que le texte ne soit pas sous le bouton.
-      display: block;
+
+.back {
+  margin-right: 20px; /* Adjust spacing between button and breadcrumb */
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Breadcrumb and other styles remain the same */
+
+
+.card_style {
+  position: relative;
+  top: 50px;
+  padding-bottom: 5px;
+
+  .mat-card-header {
+    .mat-card-title {
+      font-size: 1.2em;
+    }
+  }
+
+  .mat-card-content p {
+    margin: 0;
+    padding: 4px 0;
+    font-size: 0.9em;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-start;
+
+    button {
+      margin-right: 8px;
+    }
+
+    mat-icon {
+      vertical-align: middle;
       margin-right: 4px;
-      &:after {
-        margin-left: 4px;
-      }
     }
   }
-  
-  .example-card {
-    margin-top: 16px;
-    .mat-card-header {
-      .mat-card-title {
-        font-size: 1.2em;
-      }
-    }
-    .mat-card-content p {
-      margin: 0;
-      padding: 4px 0;
-      font-size: 0.9em;
-    }
-    .actions {
-      display: flex;
-      justify-content: flex-start;
-      button {
-        margin-right: 8px;
-      }
-      mat-icon {
-        vertical-align: middle;
-        margin-right: 4px;
-      }
-    }
-  }
-  
-  // Ajoutez des styles supplémentaires pour les boutons, si nécessaire
-  button.mat-button {
-    display: inline-flex;
-    align-items: center;
-    margin: 4px;
-  }
-  
-  // Utilisez cette classe pour le contenu du fichier ou du dossier
-  .file-content, .folder-content {
-    cursor: pointer;
-    &:hover {
-      background-color: #f0f0f0;
-    }
-  }
-  
+}
 
-  .example-card:hover{
-    background-color: gray;
-  }
+button.mat-button {
+  display: inline-flex;
+  align-items: center;
+  margin: 4px;
+}
+
+.card_style:hover{
+    background: #d9ed92;
+}
+
+.card_subtitle{
+  opacity: 0.7;
+}
+

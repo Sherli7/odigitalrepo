@@ -21,7 +21,11 @@ export const environment = {
     DOWNLOADFILEASZIP:`${url}/api/-default-/public/alfresco/versions/1/downloads`,
     DOWNLOADZIP:`${url}/api/-default-/public/alfresco/versions/1/nodes/`,
     FILEVERSIONHISTORY:`${url}/api/-default-/public/alfresco/versions/1/nodes/`,
-    CHECKVALIDTICKET:`${url}/api/-default-/public/alfresco/versions/1/tickets/-me-`,
+    CHECKVALIDTICKET:`${url}/api/-default-/public/authentication/versions/1/tickets/-me-?alf_ticket=`,
+    DOWNLOADVERSIONFILE:`${url}/api/-default-/public/alfresco/versions/1/nodes/`,
+    SEARCHAPI:`${url}/api/-default-/public/search/versions/1/search`,
+    TRASHCANAPI:`${url}/api/-default-/public/alfresco/versions/1/deleted-nodes`,
+
     
   };
   

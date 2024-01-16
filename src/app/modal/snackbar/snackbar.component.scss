@@ -1,0 +1,32 @@
+.container{
+  text-align: center;
+  font-size: 20px;
+}
+
+  h1{
+    background-color: #6A1E74;
+    color: white;
+    border: 1px solid transparent;
+  }
+
+  .button {
+    border-radius: 4px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .button2 {background-color: #F26A21;} 
+  .button3 {background-color: #9b9d9e;} 
+  
+  .button2:hover{
+    transition: 0.3s;
+    background-color: #fb7026;
+}
+
+.button3:hover {background-color: #a7c957;} 

@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
     .subscribe((res:any)=>{
       this.userName=res.entry.userId;
       localStorage.setItem('token', res.entry.id);
+      localStorage.setItem('userId', res.entry.userId);
       this.messagerror="Heureux de vous revoir "+this.userName;
       this.openSuccessSnackBar();
       this.router.navigateByUrl('/dashboard/myfiles');
@@ -74,5 +75,5 @@ export class LoginComponent implements OnInit {
       verticalPosition: this.verticalPosition,
       panelClass: ['red-snackbar','login-snackbar'],
       });
-     }
+    }
 }

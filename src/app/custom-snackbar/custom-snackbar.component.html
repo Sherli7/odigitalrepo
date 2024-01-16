@@ -1,0 +1,8 @@
+<div class="cus-snackbar">
+    <mat-icon>done</mat-icon>
+    &nbsp;
+    <span>{{data?.message}}!</span>
+    <div class="spacer" (click)="closeSnackbar()">
+        <button mat-button>{{data.action}}</button>
+    </div>
+</div>

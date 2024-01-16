@@ -2,3 +2,20 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.success-snackbar{
+    background: #82b435;
+}
+
+::ng-deep .mat-snack-bar-container.success-snackbar {
+    background: #82b435;
+}
+
+
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  font-size: var(--mdc-snackbar-supporting-text-size);
+  font-family: var(--mdc-snackbar-supporting-text-font);
+  font-weight: var(--mdc-snackbar-supporting-text-weight);
+  line-height: var(--mdc-snackbar-supporting-text-line-height);
+  background: violet;
+}

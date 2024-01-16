@@ -59,8 +59,10 @@ export class NodeService {
     return this.http.get(`${API.FILEVERSIONHISTORY}${nodeId}/versions?alf_ticket=${localStorage.getItem('token')}`);
   }
   
-  downloadFileVersion(nodeId: string, versionId: string): Observable<Blob> {
-    return this.http.get(`${API.FILEVERSIONHISTORY}${nodeId}/versions/${versionId}/content?alf_ticket=${localStorage.getItem('token')}`, { responseType: 'blob' });
+
+  downloadFileVersion(nodeId: string, versionId: string): Observable<HttpResponse<Blob>> {
+    const url = `${API.DOWNLOADVERSIONFILE}${nodeId}/versions/${versionId}/content?alf_ticket=${localStorage.getItem('token')}`;
+    return this.http.get(url, { observe: 'response', responseType: 'blob' });
   }
 
   updateFileContent(nodeId: string, file: File, majorVersion: boolean, comment: string) {
@@ -99,5 +101,38 @@ export class NodeService {
   getComment(nodeId: any) {
     return this.http.get(API.SPECIFICNODE+nodeId+'/comments?alf_ticket='+localStorage.getItem('token'));
   }
+
+  searchFullText(query: string): Observable<any> {
+    const requestBody = {
+      query: {
+        query: query,
+        language: 'afts'
+      },
+      paging: {
+        maxItems: '50',
+        skipCount: '0'
+      }
+    };
+    return this.http.post(API.SEARCHAPI+'?alf_ticket='+localStorage.getItem('token'), requestBody);
+  }
   
+
+  deleteNode(nodeId: string): Observable<any> {
+    return this.http.delete(`${API.SPECIFICNODE}${nodeId}?alf_ticket=${localStorage.getItem('token')}`);
+  }
+
+  getDeleteNode(): Observable<any> {
+    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}`);
+  }
+
+
+  restoreDeletedNode(nodeId:string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',// Remplacez par vos identifiants
+    });
+    return this.http.post(`${API.TRASHCANAPI}/${nodeId}/restore?alf_ticket=${localStorage.getItem('token')}`,headers);
+  }
+
+  
+
 }

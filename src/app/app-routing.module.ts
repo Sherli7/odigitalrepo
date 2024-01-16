@@ -9,6 +9,8 @@ import { AuthGuard } from './service/auth-guard.service';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { VersionHistoryComponent } from './version-history/version-history.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { TrashcanComponent } from './trashcan/trashcan.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -38,8 +40,12 @@ const routes: Routes = [
         component: RepositoryComponent
       },
       {
-        path: 'history',
-        component: VersionHistoryComponent
+        path: 'trashcan',
+        component: TrashcanComponent
+      },
+      {
+        path: 'account',
+        component: ProfileComponent
       },
       {path:'**',component:NotFoundComponent}
     ],

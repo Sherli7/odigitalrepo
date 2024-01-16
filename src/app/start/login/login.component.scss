@@ -1,11 +1,6 @@
 
 .login-container {
-  background-color: var(--maarch-color-primary);
-}
-
-.login-content {
-  background-color: var(--maarch-color-primary);
-  /* Keep the inherited background full size. */
+  background-color: #82b435;;
   background-attachment: fixed;
   background-size: cover;
   display: grid;
@@ -15,82 +10,46 @@
   transition: opacity 1s;
 }
 
-.login-form {
-  max-width: 768px;
-  text-align: center;
-}
-
-.showForm {
-  opacity: 1;
-  transition: opacity 1s;
-}
-
-.input-row {
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
 .maarchLogo {
-  transition: all 1s ease-in-out;
-  width: 100%;
+  width: 30%;
   height: auto;
-  padding-bottom: 10px;
-}
-
-footer {
-  color: white;
-  position: absolute;
-  bottom: 5px;
-  //font-size: 10px;
-  opacity: 0.8;
-  left: 10px;
+  padding-top: 1px;
+  position: relative;
+  bottom: 30px;
 }
 
 .infoLogin {
   font-weight: bold;
   color: white;
   text-decoration: none;
+  position: relative;
+  bottom: 138px;
+  margin: 0 70px;
+  text-align: justify;
+  text-justify: auto;
 }
 
 .login-form {
   text-align: center;
-  padding: 10px;
-  max-width: 550px;
+  max-width: 385px;
+  padding: 48px 4px !important;
   height: auto;
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
+  box-shadow: 0.33px 2px 12px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   position: relative;
   z-index: 1;
-  background: inherit;
+  background: #fff;
   overflow: hidden;
-  border: 2px #24b0ed solid;
-
-  ::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
-      /*change color of label*/
-      color: white !important;
-  }
-
-  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-      color: white !important;
-      background: white;
-  }
-
-  ::ng-deep.mat-form-field-underline {
-      /*change color of underline*/
-      background-color: white !important;
-  }
-
-  ::ng-deep.mat-form-field-ripple {
-      /*change color of underline when focused*/
-      background-color: white !important;
-  }
-
-  ::ng-deep.mat-form-field-appearance-outline .mat-form-field-suffix {
-      top: 0;
-  }
+  border: 2px #fff solid;
 }
 
+.mat-mdc-text-field-wrapper{
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  outline: none;
+  font-size: 100%;
+  width: 316px
+}
 .login-form:before {
   content: "";
   position: absolute;
@@ -100,14 +59,35 @@ footer {
   left: 0;
   right: 0;
   bottom: 0;
-  //box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+  //box-shadow: inset 0 0 2000px rgba(6, 136, 34, 0.5);
   filter: blur(10px);
   margin: -20px;
 }
 
-.login {
-  ::ng-deep .mat-form-field-wrapper {
-      padding-bottom: 0px !important;
-  }
+.input-row{
+ width: 80%;
+ padding: auto;
+}
 
+.product_name{
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.connexion_button{
+  color: white;
+  background: #82b435;
+  width: 80%;
+  font-family: Open Sans Bold,Arial,sans-serif;
+  min-height: 34px;
+}
+
+.mat-mdc-text-field-wrapper {
+  height: 15px; /* Réduisez la hauteur selon vos besoins */
+  padding: 4px; /* Ajustez la marge intérieure si nécessaire */
+}
+
+.mat-form-field {
+  margin-bottom: 10px; /* Réduisez l'espace entre les champs de saisie */
 }

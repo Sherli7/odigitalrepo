@@ -1,8 +1,9 @@
+<h2 mat-dialog-title style="text-align: center;">Créer un dossier</h2>
 <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form-container">
     <mat-form-field appearance="fill">
-      <mat-label>Name of folder</mat-label>
-      <input matInput formControlName="name">
+      <mat-label>Nom du dossier</mat-label>
+      <input matInput formControlName="name" class="field">
     </mat-form-field>
-    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary">Valider</button>
   </form>
   

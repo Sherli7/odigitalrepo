@@ -1,62 +1,75 @@
 <mat-card class="card-0x">
-    <button class="back" mat-button (click)="previous()"><mat-icon>subdirectory_arrow_left</mat-icon>{{nodeprecedent}}</button>
-    <mat-card-content><span class="racine" *ngFor="let parentName of parentNameStack; let last = last">
-      {{ parentName }}{{ !last ? ' > ' : '' }}
-    </span></mat-card-content>
-  </mat-card>
- 
-<mat-card class="example-card" *ngFor="let node of currentNode">
-    <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id);getName(node.entry.name,node.entry.nodeType)">
-        <mat-card-header>
-            <mat-card-title>{{ node.entry.name }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
-              Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
-            <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
-              Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
-          </mat-card-content>
-          <mat-card-actions class="actions">
-            <button mat-button (click)="previewFile(node.entry.id, node.entry.name)" *ngIf="node.entry.isFile"><mat-icon>details</mat-icon> Détails</button>
-            <button mat-button (click)="downloadFilesAsZips(node.entry.id, node.entry.name)" *ngIf="node.entry.isFolder">
-                <mat-icon>download</mat-icon> Télécharger le zip
-            </button>
-            <button mat-button *ngIf="node.entry.isFile"> <mat-icon>delete</mat-icon> Delete
-            </button>
-            <button mat-button *ngIf="node.entry.isFile">
-                <mat-icon>thumb_up</mat-icon> Like
-            </button>
-            <button mat-button>
-                <mat-icon>update</mat-icon> Update
-            </button>
-          </mat-card-actions>
-    </div>
-    <div *ngIf="node.entry.isFile">
-        <mat-card-header>
-            <mat-card-title>{{ node.entry.name }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
-              Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
-            <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
-              Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
-          </mat-card-content>
-          <mat-card-actions class="actions">
-            <button mat-button (click)="previewFile(node.entry.id, node.entry.name)"><mat-icon>details</mat-icon> Détails</button>
-            <button mat-button (click)="downloadFile(node.entry.id, node.entry.name)">
-                <mat-icon>download</mat-icon> Télécharger
-            </button>
-            <button mat-button *ngIf="node.entry.isFile"> <mat-icon>delete</mat-icon> Delete
-            </button>
-            <button mat-button *ngIf="node.entry.isFile">
-                <mat-icon>thumb_up</mat-icon> Like
-            </button>
-            <button mat-button>
-                <mat-icon>update</mat-icon> Update
-            </button>
-            <button *ngIf="node.entry.isFile" mat-button  (click)="versionHistory(node.entry.id);OpenVersionpopup(node.entry.id)"><mat-icon>cloud_upload</mat-icon>Version history</button>
+  <div class="fixed-header">
+    <button class="back" mat-button (click)="previous()">
+      <mat-icon>subdirectory_arrow_left</mat-icon>{{ nodeprecedent }}
+    </button>
+    <nav class="breadcrumb">
+      <span *ngFor="let parentName of parentNameStack; let last = last">
+        <a *ngIf="!last; else lastCrumb">{{ parentName }}</a>
+        <ng-template #lastCrumb>{{ parentName }}</ng-template>
+        <span *ngIf="!last" class="divider"> > </span>
+      </span>
+    </nav>
+  </div>
+  <!-- Other content of mat-card -->
+</mat-card>
 
-          </mat-card-actions>
-    </div>
-  </mat-card>
-  
+
+
+<mat-card class="card_style" *ngFor="let node of currentNode">
+  <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id);getName(node.entry.name,node.entry.nodeType)">
+      <mat-card-header>
+          <mat-card-title>{{ node.entry.name }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card_subtitle">
+          <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
+            Créé il y a {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
+          <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
+            Modifié il y a {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
+        </mat-card-content>
+        <mat-card-actions class="actions">
+          <button mat-button (click)="previewFile(node.entry.id, node.entry.name)" *ngIf="node.entry.isFile"><mat-icon>details</mat-icon> Détails</button>
+          <button mat-button (click)="downloadFilesAsZips(node.entry.id, node.entry.name)" *ngIf="node.entry.isFolder">
+              <mat-icon>download</mat-icon> Télécharger le zip
+          </button>
+          <button mat-button *ngIf="node.entry.isFile"> <mat-icon>delete</mat-icon> Delete
+          </button>
+          <button mat-button *ngIf="node.entry.isFile">
+              <mat-icon>thumb_up</mat-icon> Like
+          </button>
+          <button mat-button>
+              <mat-icon>update</mat-icon> Update
+          </button>
+        </mat-card-actions>
+  </div>
+  <div *ngIf="node.entry.isFile">
+      <mat-card-header>
+          <mat-card-title>{{ node.entry.name }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
+            Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
+          <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
+            Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
+        </mat-card-content>
+        <mat-card-actions class="actions">
+          <button mat-button (click)="previewFile(node.entry.id, node.entry.name)"><mat-icon>details</mat-icon> Détails</button>
+          <button mat-button (click)="downloadFile(node.entry.id, node.entry.name)">
+              <mat-icon>download</mat-icon> Télécharger
+          </button>
+          <button mat-button *ngIf="node.entry.isFile" (click)="delete(node.entry.id,node.entry.name)"> <mat-icon>delete</mat-icon> Delete
+          </button>
+          <button mat-button *ngIf="node.entry.isFile">
+              <mat-icon>thumb_up</mat-icon> Like
+          </button>
+          <button mat-button (click)="OpenCommentpopup(node.entry.id)">
+            <mat-icon>comment</mat-icon> comment
+        </button>
+          <button mat-button>
+              <mat-icon>update</mat-icon> Update
+          </button>
+          <button *ngIf="node.entry.isFile" mat-button  (click)="versionHistory(node.entry.id);OpenVersionpopup(node.entry.id)"><mat-icon>cloud_upload</mat-icon>Version history</button>
+
+        </mat-card-actions>  
+  </div>
+</mat-card>

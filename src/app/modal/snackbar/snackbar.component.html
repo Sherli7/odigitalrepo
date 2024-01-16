@@ -1,1 +1,8 @@
-<p>snackbar works!</p>
+<div class="container">
+  <h1>Confirmation</h1>
+  <div class="content">
+      <p>Voulez-vous supprimer {{data.arg1}}?</p>
+      <button class="button button2" (click)="permitDelete()">Supprimer</button>
+      <button class="button button3" (click)="onNoPermit()">Annuler</button>    
+  </div>
+</div>

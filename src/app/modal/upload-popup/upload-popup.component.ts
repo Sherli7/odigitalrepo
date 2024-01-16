@@ -1,7 +1,7 @@
-import { Component, Inject, AfterViewInit,ChangeDetectorRef,OnInit} from '@angular/core';
+import { Component, Inject, AfterViewInit,ChangeDetectorRef,OnInit, EventEmitter, Output} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { NodeService } from '../../service/node.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -12,7 +12,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrl: './upload-popup.component.scss'
 })
 export class UploadPopupComponent implements OnInit,AfterViewInit {
-
+  @Output() uploadCompleted = new EventEmitter<boolean>();
   importdata: any;
   closeMessage = 'closed';
   nodeTypes: any;
@@ -87,47 +87,48 @@ ngOnInit() {
     return d <= today;
   };
   
-  upload(): void {                               
-    this.progress = 0;                    
-    this.message = "";                              
+  
+
+  upload(): void {
+    this.progress = 0;
+    this.message = '';
     const formData = new FormData();
-                                    
-    // Ajouter les champs de formulaire au FormData
+
+    // Ajout des champs de formulaire
     Object.keys(this.myform.controls).forEach((controlName) => {
       let fieldValue = this.myform.get(controlName)?.value;
       if (fieldValue instanceof Date) {
         fieldValue = this.formatDate(fieldValue);
-        formData.append(controlName, fieldValue);
-      }else{
-        formData.append(controlName, fieldValue);
       }
+      formData.append(controlName, fieldValue);
     });
-  
-    // Ajouter le fichier au FormData
+
+    // Ajout du fichier
     if (this.currentFile) {
       formData.append("filedata", this.currentFile);
-      
-      // Appeler la méthode uploadFile de NodeService avec le FormData
-      this.node.uploadFile(formData).subscribe(
-        (event: any) => {
+      this.node.uploadFile(formData).pipe(
+        finalize(() => this.ref.close('success')) // Ferme le dialogue après l'achèvement de l'opération
+      ).subscribe({
+        next: (event: any) => {
           if (event.type === HttpEventType.UploadProgress) {
             this.progress = Math.round(100 * event.loaded / event.total);
+            this.ref.close('deleted');
           } else if (event instanceof HttpResponse) {
             this.message = event.body.message;
             this.openSuccessSnackBar();
-          }
+            // Dans UploadPopupComponent
+            //this.uploadCompleted.emit(true); // Après un téléchargement réussi
+            this.uploadCompleted.emit(true); // Émission de l'event en cas de succès
+          } 
         },
-        (err: any) => {
+        error: (err: any) => {
           this.progress = 0;
-          if (err.error && err.error.message) {
-            this.message = err.error.message;
-            this.openFailureSnackBar();
-          } else {
-            this.message = 'Could not upload the file!';
-            this.openFailureSnackBar();
-          }
+          this.message = err.error?.message || 'Could not upload the file !';
+          this.openFailureSnackBar();
+          this.uploadCompleted.emit(false); // Émission de l'event même en cas d'échec
           this.currentFile = undefined;
-        });
+        }
+      });
     }
   }
   

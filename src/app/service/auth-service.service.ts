@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { API } from '../../environnement/environnement';
 
 @Injectable({
@@ -21,22 +21,6 @@ export class AuthServiceService {
     return this.currentUserSubject.value;
   }
 
-  login(user: string, pw: string) {
-    return this.http.get(`${API.LOGIN}?u=${user}&pw=${pw}`, {  
-      headers: new HttpHeaders().set('Content-Type', 'text/xml'),
-      responseType: 'text'  
-    }).pipe(map(token => {
-      // login successful if there's a jwt token in the response
-      if (token) {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('token', token);
-        this.currentUserSubject.next(token);
-      }
-
-      return token;
-    }));
-  }
-
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('token');
@@ -44,24 +28,44 @@ export class AuthServiceService {
     this.router.navigate(['/login']);
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
-  
+
+  login(credentials: { userId: string, password: string }): Observable<any> {
+    return this.http.post<any>(API.AUTHENTICATION, credentials)
+      .pipe(
+        map(res => {
+          // Stocker le token et les autres informations dans le stockage local
+          localStorage.setItem('token', res.entry.id);
+          localStorage.setItem('userId', res.entry.userId);
+          this.currentUserSubject.next(res.entry.id);
+          return res;
+        }),
+        catchError(error => {
+          return throwError(error);
+        })
+      );
+  }
+
   isAuthenticated(): boolean {
-    return !!this.currentUserValue;
+    return !!this.getToken();
   }
 
-  validateTicket(): Observable<any> {
-    // Retrieve the token and ensure it's a string before encoding it.
-    const token = localStorage.getItem('token') || ''; // Fallback to an empty string if null
-  
-    const headers = new HttpHeaders({
-      'Authorization': "Basic " + btoa(token)
-    });
-  
-    return this.http.get(API.CHECKVALIDTICKET, { headers });
+  validateToken(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    return this.http.get(API.CHECKVALIDTICKET + token).pipe(
+      map(response => {
+        // Vous pouvez ajouter ici une logique supplémentaire si nécessaire
+        return response;
+      }),
+      catchError(error => {
+        this.logout(); // Déconnecter l'utilisateur si le token n'est pas valide
+        return throwError(error);
+      })
+    );
   }
-  
-
 }
