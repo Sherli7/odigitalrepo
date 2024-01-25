@@ -1,3 +1,6 @@
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr);
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -27,6 +30,19 @@ import { FolderDialogComponent } from './folder-dialog/folder-dialog.component';
 import { CommentDialogComponent } from './comment-dialog/comment-dialog.component';
 import { TrashcanComponent } from './trashcan/trashcan.component';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
+import { AccountComponent } from './account/account.component';
+import { PasswordResetComponent } from './account/password-reset/password-reset.component';
+import { SiteComponent } from './account/site/site.component';
+import { GroupeComponent } from './account/groupe/groupe.component';
+import { GeneralComponent } from './account/general/general.component';
+import { TrashcansComponent } from './account/trashcans/trashcans.component';
+
+
+// ...
+
+registerLocaleData(fr.default);
+import * as fr from '@angular/common/locales/fr';
+
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -60,6 +76,12 @@ export const MY_DATE_FORMATS = {
     CommentDialogComponent,
     TrashcanComponent,
     CustomSnackbarComponent,
+    AccountComponent,
+    PasswordResetComponent,
+    SiteComponent,
+    GroupeComponent,
+    GeneralComponent,
+    TrashcansComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -73,9 +95,11 @@ export const MY_DATE_FORMATS = {
     MaterialModule,
     DocumentEditorModule
   ],
-  providers: [  { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  providers: [  
+    DatePipe,
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     // Assurez-vous de définir également le bon locale ici
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

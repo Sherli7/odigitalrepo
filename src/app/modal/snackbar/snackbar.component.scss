@@ -3,8 +3,8 @@
   font-size: 20px;
 }
 
-  h1{
-    background-color: #6A1E74;
+.error-snackbar{
+    background-color: #4c741e;
     color: white;
     border: 1px solid transparent;
   }
@@ -30,3 +30,11 @@
 }
 
 .button3:hover {background-color: #a7c957;} 
+
+.error{
+  background-color: red;
+}
+
+.info{
+  background-color: gray;
+}

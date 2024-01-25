@@ -8,9 +8,14 @@ import { SharedComponent } from './components/shared/shared.component';
 import { AuthGuard } from './service/auth-guard.service';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { VersionHistoryComponent } from './version-history/version-history.component';
-import { ProfileComponent } from './components/profile/profile.component';
 import { TrashcanComponent } from './trashcan/trashcan.component';
+import { AccountComponent } from './account/account.component';
+import { PasswordResetComponent } from './account/password-reset/password-reset.component';
+import { SiteComponent } from './account/site/site.component';
+import { GroupeComponent } from './account/groupe/groupe.component';
+import { GeneralComponent } from './account/general/general.component';
+import { TrashcansComponent } from './account/trashcans/trashcans.component';
+import { UploadPopupComponent } from './modal/upload-popup/upload-popup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -44,14 +49,40 @@ const routes: Routes = [
         component: TrashcanComponent
       },
       {
-        path: 'account',
-        component: ProfileComponent
+        path: 'upload',
+        component: UploadPopupComponent
       },
-      {path:'**',component:NotFoundComponent}
-    ],
-    
+      {
+        path: 'account',
+        component: AccountComponent,
+        children: [
+          {
+            path: 'password-reset',
+            component: PasswordResetComponent // Créez le composant PasswordResetComponent si ce n'est pas déjà fait
+          },
+          {
+            path: 'general',
+            component: GeneralComponent // Créez le composant PasswordResetComponent si ce n'est pas déjà fait
+          },
+          {
+            path: 'trashcan',
+            component: TrashcansComponent // Créez le composant PasswordResetComponent si ce n'est pas déjà fait
+          },
+          {
+            path: 'site',
+            component: SiteComponent // Créez le composant SiteComponent si ce n'est pas déjà fait
+          },
+          {
+            path: 'groupe',
+            component: GroupeComponent // Créez le composant GroupeComponent si ce n'est pas déjà fait
+          },
+          { path: '**', component: NotFoundComponent }
+        ]
+      },
+      { path: '**', component: NotFoundComponent }
+    ]
   },
-  // If you have other routes, they would go here
+  // Autres routes s'il y en a
 ];
 
 @NgModule({

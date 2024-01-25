@@ -9,8 +9,8 @@
 
 <form [formGroup]="myForm" (ngSubmit)="addComment()" class="custom-form">
   <mat-form-field class="custom-form-field">
-    <mat-label>Your Comment</mat-label>
+    <mat-label>Vos observations</mat-label>
     <textarea matInput formControlName="content" class="custom-textarea"></textarea>
   </mat-form-field>
-  <button mat-raised-button class="custom-button" type="submit" [disabled]="myForm.invalid">Submit</button>
+  <button mat-raised-button class="custom-button" type="submit" [disabled]="myForm.invalid">valider</button>
 </form>

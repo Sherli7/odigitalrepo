@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Redirect to dashboard if already logged in
     if (this.authService.isAuthenticated()) {
-      this.router.navigateByUrl('/myfiles');
+      this.router.navigateByUrl('/dashboard/home');
     }
   }
 
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('userId', res.entry.userId);
       this.messagerror="Heureux de vous revoir "+this.userName;
       this.openSuccessSnackBar();
-      this.router.navigateByUrl('/dashboard/myfiles');
+      this.router.navigateByUrl('/dashboard/home');
     },err=>{
       this.messagerror='Invalid Login Credentials....'
       this.openFailureSnackBar();

@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>Upload a file</h1>
   <div mat-dialog-content>
     <mat-stepper orientation="vertical">
-      <!-- Step 1 -->
+      <!-- Étape 1 : Sélection du type de nœud -->
       <mat-step>
         <ng-template matStepLabel>Select nodeType</ng-template>
         <ng-template matStepContent>
@@ -12,10 +12,6 @@
               <mat-option *ngFor="let type of nodeTypes" [value]="type.name" (click)="changeNodeType(type.name)">{{ type.title }}</mat-option>
             </mat-select>
           </mat-form-field>
-<!--           <mat-form-field>
-            <mat-label>Nom du document</mat-label>
-            <input matInput formControlName="cm:name" required="true">
-          </mat-form-field><br> -->
           <mat-form-field>
             <mat-label>Titre du document</mat-label>
             <input matInput formControlName="cm:title">
@@ -23,48 +19,46 @@
         </ng-template>
       </mat-step>
 
-      <!-- Step 2 -->
+      <!-- Étape 2 : Champs de métadonnées dynamiques -->
       <mat-step>
-        <ng-template matStepLabel>Metadata fields</ng-template>
-        <ng-template matStepContent>
-          <!-- Iterate over form controls -->
-            <div [ngSwitch]="level2.dataType">
-              <mat-form-field *ngSwitchCase="'d:date'">
-                <mat-label>{{level2.title}}</mat-label>
-                <input matInput [matDatepicker]="picker" [formControlName]="level2.name">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+          <ng-template matStepLabel>Metadata fields</ng-template>
+          <ng-template matStepContent>
+            <!-- Itération sur les champs de métadonnées -->
+            <div *ngFor="let field of metadataFields">
+              <mat-form-field *ngIf="field.dataType === 'd:text'">
+                <mat-label>{{field.title}}</mat-label>
+                <input matInput [formControlName]="field.name" [required]="field.mandatory"> <!-- Utilisation de [required] -->
+                <mat-hint *ngIf="field.mandatory">Champ obligatoire</mat-hint> <!-- Ajout d'un indicateur visuel -->
+              </mat-form-field>
+              <mat-form-field *ngIf="field.dataType === 'd:date'">
+                <mat-label>{{field.title}}</mat-label>
+                <input matInput [matDatepicker]="datepickers[field.name]" [formControlName]="field.name" [required]="field.mandatory"> <!-- Utilisation de [required] -->
+                <mat-datepicker-toggle matIconSuffix [for]="datepickers[field.name]" [required]="field.mandatory"></mat-datepicker-toggle> <!-- Utilisation de [required] -->
+                <mat-datepicker #datepickers[field.name]="matDatepicker"></mat-datepicker>
+                <mat-hint *ngIf="field.mandatory">Champ obligatoire</mat-hint> <!-- Ajout d'un indicateur visuel -->
               </mat-form-field>
               <br>
-              <!-- Ajoutez d'autres cas pour différents types de champs -->
             </div>
-        </ng-template>
-      </mat-step>
-      <!-- Step 3 -->
+          </ng-template>
+        </mat-step>
+
+
+      <!-- Étape 3 : Téléchargement de fichier -->
       <mat-step>
         <ng-template matStepLabel>Upload a file</ng-template>
-       <ng-template matStepContent>
-        <div>       
+        <ng-template matStepContent>
+          <div>
             <div>
-              <input
-                type="file"
-                (change)="selectFile($event)"
-              />
+              <input type="file" (change)="selectFile($event)" />
             </div>
-            <button
-            mat-flat-button
-            color="primary"
-            (click)="upload()"
-          >
-            Finish
-          </button>
-        </div>
-        
-        <div *ngIf="message" class="message">
-          {{ message }}
-        </div>       
-  </ng-template>
+            <button mat-flat-button color="primary" (click)="upload()">
+              Finish
+            </button>
+          </div>
+          <div *ngIf="message" class="message">
+            {{ message }}
+          </div>
+        </ng-template>
       </mat-step>
     </mat-stepper>
   </div>

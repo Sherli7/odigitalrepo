@@ -5,6 +5,7 @@ import { Observable, finalize } from 'rxjs';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { NodeService } from '../../service/node.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-upload-popup',
@@ -44,12 +45,14 @@ export class UploadPopupComponent implements OnInit,AfterViewInit {
   durationInSeconds: number=5;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
+  metadataFields: any;
+  datepickers: { [key: string]: MatDatepicker<any> } = {};
   constructor(
     private ref: MatDialogRef<UploadPopupComponent>,
     private node: NodeService,
     private _snackBar: MatSnackBar,
     private buildr: FormBuilder,
+    private formBuilder:FormBuilder,
     private cdRef: ChangeDetectorRef  // Ajoutez le ChangeDetectorRef ici
   ) {}
 
@@ -160,40 +163,30 @@ ngOnInit() {
     }
   }
 
-  changeNodeType(node: any) {
-    this.selectedNodeType = '';
-    this.selectedNodeType = node;
-    this.node.getNodeTypeDefinition().subscribe((s: any) => {
-      const filteredNodes = s.filter((node: any) => node.name.startsWith(this.selectedNodeType));
-      for (let i = 0; i < filteredNodes.length; i++) {
-        this.metaNode = filteredNodes;
-        console.log("Level 1 name:", this.metaNode);
-        for (const key in this.metaNode[i].properties) {
-
-          const propertyName = this.metaNode[i].properties[key].name;
-          if (propertyName.startsWith('obiv')) {
-            this.level2 = this.metaNode[i].properties[key];
-    
-            // Reste du code...
-            
-            this.formFix = this.trouverPrefixeEtSuffixe(this.level2.name);
-            const controlName = this.formFix.prefix + ':' + this.formFix.suffix;
+  changeNodeType(nodeTypeName: string) {
+    this.selectedNodeType = nodeTypeName;
+    this.node.getNodeTypeDefinition().subscribe((response: any) => {
+      const filteredNodes = response.filter((node: any) => node.name.startsWith(this.selectedNodeType));
+      this.metadataFields = []; // Réinitialiser les champs de métadonnées
   
-            console.log(this.trouverPrefixeEtSuffixe(this.level2.name));
-            console.log("Name ", this.level2.name);
-            console.log("Type ", this.level2.dataType);
+      filteredNodes.forEach((node:any) => {
+        for (const key in node.properties) {
+          const property = node.properties[key];
+          if (property.name.startsWith('obiv')) {
+            this.metadataFields.push(property); // Ajouter au tableau de champs
+            console.log(this.metadataFields);
+            const { prefix, suffix } = this.trouverPrefixeEtSuffixe(property.name);
+            const controlName = `${prefix}:${suffix}`;
   
-            this.formFix = this.trouverPrefixeEtSuffixe(this.level2.name);
-            console.log('Control Name:', controlName);
-            // Check if the control already exists before adding it
             if (!this.myform.get(controlName)) {
-                this.myform.addControl(controlName, this.buildr.control(''));
+              this.myform.addControl(controlName, this.formBuilder.control(''));
             }
+          }
         }
-        }
-      }
+      });
     });
   }
+  
 
 
   openSuccessSnackBar(){

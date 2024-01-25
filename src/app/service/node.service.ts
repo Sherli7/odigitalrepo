@@ -11,18 +11,18 @@ export class NodeService {
   constructor(private http: HttpClient) { }
 
   getFolderRoot(): Observable<any> {
-    return this.http.get(`${API.NODEROOT}${localStorage.getItem('token')}`);
+    return this.http.get(`${API.NODEROOT}${localStorage.getItem('token')}&include=permissions`);
   }
   getFolderShared(): Observable<any> {
-    return this.http.get(`${API.NODESHARED}${localStorage.getItem('token')}`);
+    return this.http.get(`${API.NODESHARED}${localStorage.getItem('token')}&include=permissions`);
   }
 
   getFolderMyFiles(): Observable<any> {
-    return this.http.get(`${API.NODEMYFILES}${localStorage.getItem('token')}`);
+    return this.http.get(`${API.NODEMYFILES}${localStorage.getItem('token')}&include=permissions`);
   }
 
   getSpecificNode(event: string): Observable<any> {
-    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}`);
+    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}&include=permissions`);
   }
 
   uploadFile(data: any): Observable<any> {
@@ -105,13 +105,18 @@ export class NodeService {
   searchFullText(query: string): Observable<any> {
     const requestBody = {
       query: {
-        query: query,
+        query: query ? `${query} AND TYPE:"cm:content"` : `+TYPE:"cm:content"`,
         language: 'afts'
       },
       paging: {
-        maxItems: '50',
-        skipCount: '0'
-      }
+        maxItems: '50',  // Nombre maximum d'éléments à retourner
+        skipCount: '0'   // Nombre d'éléments à ignorer (pour la pagination)
+      },
+      sort: [{
+        type: "FIELD", 
+        field: "cm:name", 
+        ascending: "false"
+      }]
     };
     return this.http.post(API.SEARCHAPI+'?alf_ticket='+localStorage.getItem('token'), requestBody);
   }
@@ -122,7 +127,7 @@ export class NodeService {
   }
 
   getDeleteNode(): Observable<any> {
-    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}`);
+    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}&include=path&incluse=permissions`);
   }
 
 
@@ -133,6 +138,34 @@ export class NodeService {
     return this.http.post(`${API.TRASHCANAPI}/${nodeId}/restore?alf_ticket=${localStorage.getItem('token')}`,headers);
   }
 
+  permanentlyDelete(nodeId:string) {
+    return this.http.delete(`${API.TRASHCANAPI}/${nodeId}?alf_ticket=${localStorage.getItem('token')}`);
+  }
+
+  getDeletedNodePath(nodeId:string) {
+    return this.http.get(`${API.TRASHCANAPI}/${nodeId}/restore?alf_ticket=${localStorage.getItem('token')}`);
+  }
   
+  getAccountProperties(personId:String){
+    return this.http.get(API.PEOPLE+'people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'));
+  }
+
+  getAccountAvatar(): Observable<any> {
+    // Assuming API.PEOPLE is the correct endpoint and you have to replace '-me-' with the actual personId
+    return this.http.get(`${API.PEOPLE}people/`+localStorage.getItem('userId')+`/avatar?alf_ticket=${localStorage.getItem('token')}`,{ responseType: 'blob' });
+  }
+
+  updatePassword(oldPassword: string, newPassword: string): Observable<any> {
+    const body = {
+      oldPassword: oldPassword,
+      password: newPassword
+    };
+
+    return this.http.put(API.PEOPLE+'people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'), body); // Replace with your API endpoint
+  }
+
+  getMyGroup(){
+    return this.http.get(`${API.PEOPLE}people/`+localStorage.getItem('userId')+`/groups?alf_ticket=${localStorage.getItem('token')}`);
+  }
 
 }

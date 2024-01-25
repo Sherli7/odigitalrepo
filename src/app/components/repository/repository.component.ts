@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AbstractRepositoryComponent } from '../../AbstractRepositoryComponent';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { SearchResultsService } from '../../service/search-results-service.service';
+import { NodeNavigationService } from '../../service/node-navigation-service.service';
 
 @Component({
   selector: 'app-repository',
@@ -22,7 +24,9 @@ export class RepositoryComponent extends AbstractRepositoryComponent {
     protected override nodeService: NodeService,
     protected override auth: AuthServiceService,
     protected override router: Router,
-    protected override cdr: ChangeDetectorRef
+    protected override cdr: ChangeDetectorRef,
+    private searchResultsService: SearchResultsService,
+    private nodeNavigationService: NodeNavigationService
   ) {
     super(sanitizer, dialog, nodeService, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
   }
@@ -84,5 +88,12 @@ export class RepositoryComponent extends AbstractRepositoryComponent {
         }
       }
     );
+  }
+
+  private subscribeToSearchResults() {
+    this.searchResultsService.currentSearchResults.subscribe(results => {
+      this.currentNode = results;
+      this.cdr.detectChanges(); // Détection des changements pour la mise à jour de l'interface utilisateur
+    });
   }
 }

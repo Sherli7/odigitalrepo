@@ -1,0 +1,58 @@
+<div class="container">
+  
+  <h2>Documents et Dossiers supprimés</h2>
+  <div class="search-bar d-flex align-items-center">
+    <!-- Search input -->
+    <div class="search-container flex-grow-1">
+      <input type="text" class="form-control" placeholder="Search.." name="search">
+      <button mat-button class="search_btn">Search</button>
+    </div>
+    
+    <!-- Search and Clear buttons -->
+    <button mat-button color="secondary">Clear</button>
+    
+    <!-- Selection Menu Trigger -->
+    <button mat-button [matMenuTriggerFor]="selectedMenu">Elements sélectionné(s)</button>
+    <mat-menu #selectedMenu="matMenu">
+      <button mat-menu-item>Récupérer</button>
+      <button mat-menu-item (click)="deleteSelected()">Supprimer</button>
+    </mat-menu>
+    
+    <!-- Select Menu Trigger -->
+    <button mat-button [matMenuTriggerFor]="selectionMenu">Sélection</button>
+    <mat-menu #selectionMenu="matMenu">
+      <button mat-menu-item>Tout</button>
+      <button mat-menu-item>Inverser</button>
+      <button mat-menu-item>Anuler</button>
+    </mat-menu>
+    
+    <!-- Spacer and Empty button -->
+    <button mat-button color="warn">Vider</button>
+  </div>
+  <br><br>
+  <hr>
+  <!-- Table for displaying files -->
+  <table class="table">
+    <tbody>
+      <tr  *ngFor="let node of currentTrash">
+        <td>
+          <mat-checkbox (change)="onCheckboxChange(node.id, $event.checked)"></mat-checkbox>
+        </td>
+        <td class="file-info">
+          <span class="material-icons" *ngIf="node.isFile">description</span>
+          <span class="material-symbols-outlined" *ngIf="!node.isFile">folder</span>
+          <div class="file-details">
+            <div>{{node.name}}</div>
+            <div>Supprimé {{ node.archivedAt | date:'à HH:mm:ss, le d MMMM yyyy' }} par {{node.archivedByUser.displayName}}</div>
+            <div>{{node.path.name}}</div>
+          </div>
+        </td>
+        <td class="actions">
+          <button mat-button color="primary" (click)="trashcanAction(node.id,node.name,'recovery')">Recover</button>
+          <button mat-button color="warn" (click)="trashcanAction(node.id, node.name,'permanente')">Delete</button>
+        </td>
+      </tr>
+      <!-- Repeat rows for each item -->
+    </tbody>
+  </table>
+</div>

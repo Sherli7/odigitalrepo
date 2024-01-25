@@ -1,0 +1,33 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adjust the gap as needed */
+}
+
+.search-container {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.search-container input {
+  flex-grow: 1;
+  margin-right: 8px; /* Adjust the margin as needed */
+  border:1px solid #82b435
+}
+
+/* CSS for changing input border color on focus */
+input[type="text"]:focus {
+  border-color: #82b435;
+  outline: none; /* Removes the default focus highlight */
+  /* Optional: if you want a box-shadow that matches the border color */
+  box-shadow: 0 0 0 0.2rem rgba(130, 179, 53, 0.25);
+}
+
+/* ... Rest of your CSS ... */
+
+.search_btn:hover{
+  border-bottom: 5px solid gray;
+  background-color: #82b435;
+  color: white;
+}

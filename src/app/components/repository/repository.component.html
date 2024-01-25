@@ -14,8 +14,6 @@
   <!-- Other content of mat-card -->
 </mat-card>
 
-
-
 <mat-card class="card_style" *ngFor="let node of currentNode">
   <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id);getName(node.entry.name,node.entry.nodeType)">
       <mat-card-header>
@@ -57,7 +55,7 @@
           <button mat-button (click)="downloadFile(node.entry.id, node.entry.name)">
               <mat-icon>download</mat-icon> Télécharger
           </button>
-          <button mat-button *ngIf="node.entry.isFile" (click)="delete(node.entry.id,node.entry.name)"> <mat-icon>delete</mat-icon> Delete
+          <button mat-button *ngIf="node.entry.isFile" (click)="trashcanAction(node.entry.id,node.entry.name,'temporaire')"> <mat-icon>delete</mat-icon> Delete
           </button>
           <button mat-button *ngIf="node.entry.isFile">
               <mat-icon>thumb_up</mat-icon> Like

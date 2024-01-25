@@ -12,16 +12,13 @@ import { PdfViewerDialogComponent } from './pdf-viewer-dialog/pdf-viewer-dialog.
 import { VersionHistoryComponent } from './version-history/version-history.component';
 import { HttpResponse } from '@angular/common/http';
 import { UploadPopupComponent } from './modal/upload-popup/upload-popup.component';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 
 @Component({
     selector: 'app-abstract-repository',
     template: '',
   })
 export abstract class AbstractRepositoryComponent implements OnInit {
-    
-
+    currentPermissions: any;
     currentNode: any;
     versionsHistory: any;
     count: any;
@@ -92,6 +89,12 @@ export abstract class AbstractRepositoryComponent implements OnInit {
     }
   }
   
+
+  searchFullText(tag:string){
+    this.nodeService.searchFullText(tag).subscribe((result:any)=>{
+    });
+  }
+
   
     getName(newName: any,nodeType:string) {
       // Vérifie si le dernier élément de la pile est différent du nouveau nom
@@ -136,19 +139,18 @@ export abstract class AbstractRepositoryComponent implements OnInit {
         console.warn('No parent node.');
       }
     }
+
     
-    delete(arg0: any, arg1: any) {
+    trashcanAction(arg0: any, arg1: any,action:string) {
       const dialogRef = this.dialog.open(SnackbarComponent, {
         width: '40%',
         height:'auto',
-        data: { arg0, arg1 }
+        data: { arg0, arg1,action}
       });
     
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === 'deleted') { // Supposons que 'deleted' est retourné en cas de suppression réussie.
+      dialogRef.afterClosed().subscribe((result:any) => {
           this.refreshData();
-        }
-        console.log(result);
+          console.log(result);
       });
     }
    
@@ -184,6 +186,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
         this.nodeService.getSpecificNode(nodeid).subscribe(
           (data: any) => {
             this.currentNode = data['list'].entries;
+            this.currentPermissions = data['list'].permissions;
             this.count = data['list'].pagination;
             console.log("Current stack", this.parentStack);
     
@@ -202,6 +205,11 @@ export abstract class AbstractRepositoryComponent implements OnInit {
           }
         );
       
+    }
+
+    hasPermission(node: any, permissionName: string): boolean {
+      this.currentPermissions = [...node.permissions.inherited, ...node.permissions.locallySet];
+      return this.currentPermissions.some((perm:any) => perm.name === permissionName && perm.accessStatus === 'ALLOWED');
     }
     
     downloadFilesAsZips(nodeIds: string[], filename: string): void {

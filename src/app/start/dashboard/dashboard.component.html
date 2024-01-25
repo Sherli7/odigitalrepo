@@ -22,7 +22,7 @@
     <span>Trash</span>
 </div>
     <mat-divider></mat-divider>
-    <div class="sidebar-item">
+    <div class="sidebar-item" routerLink="/dashboard/account">
         <span class="material-icons">account_circle</span>
         <span>{{userId}}</span>
     </div>
@@ -34,45 +34,21 @@
   </div>
   <div class="search-bar-container">
     <div class="search-bar">
-      <input type="search" placeholder="Search...">
-      <button class="button" (click)="OpenFolderFormpopup()"><span class="material-icons">add</span>Add New</button>
-      <button class="button" (click)="OpenUploadpopup()"><span class="material-icons">file_upload</span>Upload</button>
+      <input type="text"
+             placeholder="Search..."
+             [matAutocomplete]="auto"
+             (input)="onSearchInput($event)"
+             [formControl]="searchControl">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let result of searchResults" [value]="result.entry.name">
+          {{ result.entry.name }}
+        </mat-option>
+      </mat-autocomplete>
+      <button class="button" (click)="OpenFolderFormPopup()"><span class="material-icons">add</span>Add New</button>
+      <button class="button" (click)="OpenUploadPopup()"><span class="material-icons">file_upload</span>Upload</button>
     </div>
   </div>
   <div class="main-content">
     <router-outlet></router-outlet>
   </div>
 </div>
-
-
-<!-- <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <h5>O'DIGITAL</h5>
-    <button mat-icon-button (click)="opened=!opened"><mat-icon>menu</mat-icon></button>
-    <span class="example-spacer"></span>    
-    <div class="example-button-container">
-      <button mat-mini-fab color="accent" (click)="logout()" aria-label="Example icon button with a logout icon">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
-<mat-sidenav-container>
-  <mat-sidenav [(opened)]="opened" mode="side" class="sidenav">
-    <mat-nav-list>
-      <div *ngFor="let folder of folders">
-        <mat-list-item [style.background]="folder.color" (click)="folder.action ? folder.action() : titleChange(folder.name)" [routerLink]="folder.routerLink ? folder.routerLink : null">
-          <mat-icon   style="margin-bottom: -6px;">{{folder.icon}}</mat-icon>{{folder.name}}
-        </mat-list-item>
-      </div>
-      <mat-divider></mat-divider>
-      <mat-list-item style="background-color: #8ecae6;" routerLink="/dashboard/account" (click)="titleChange('account');">
-      <mat-icon style="margin-bottom: -6px;">account_circle</mat-icon>Account
-
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container> -->
