@@ -42,6 +42,7 @@ import { TrashcansComponent } from './account/trashcans/trashcans.component';
 
 registerLocaleData(fr.default);
 import * as fr from '@angular/common/locales/fr';
+import { UpdateFolderComponent } from './folder-dialog/update-folder/update-folder.component';
 
 
 export const MY_DATE_FORMATS = {
@@ -81,7 +82,8 @@ export const MY_DATE_FORMATS = {
     SiteComponent,
     GroupeComponent,
     GeneralComponent,
-    TrashcansComponent
+    TrashcansComponent,
+    UpdateFolderComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [

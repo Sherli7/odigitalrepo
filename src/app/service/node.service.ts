@@ -10,19 +10,16 @@ export class NodeService {
 
   constructor(private http: HttpClient) { }
 
-  getFolderRoot(): Observable<any> {
-    return this.http.get(`${API.NODEROOT}${localStorage.getItem('token')}&include=permissions`);
+  getFolderRoot(specNode:string): Observable<any> {
+      return this.http.get(API.SPECIFICNODE+specNode+'/children?alf_ticket='+localStorage.getItem('token')+'&include=permissions,path');
   }
-  getFolderShared(): Observable<any> {
-    return this.http.get(`${API.NODESHARED}${localStorage.getItem('token')}&include=permissions`);
-  }
-
-  getFolderMyFiles(): Observable<any> {
-    return this.http.get(`${API.NODEMYFILES}${localStorage.getItem('token')}&include=permissions`);
+  
+  getCurrentNode(event: string): Observable<any> {
+    return this.http.get(`${API.SPECIFICNODE}${event}?alf_ticket=${localStorage.getItem('token')}&include=permissions,path`);
   }
 
   getSpecificNode(event: string): Observable<any> {
-    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}&include=permissions`);
+    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}&include=permissions,path`);
   }
 
   uploadFile(data: any): Observable<any> {
@@ -30,7 +27,7 @@ export class NodeService {
   }
 
   getNodeTypeDefinition(): Observable<any> {
-    return this.http.get(`${API.NODETYPE}?alf_ticket=${localStorage.getItem('token')}`);
+    return this.http.get(`${API.NODETYPE}?alf_ticket=${localStorage.getItem('token')}&include=path`);
   }
   
 
@@ -84,11 +81,12 @@ export class NodeService {
   }
 
 
-  createNode(nodeData: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',// Remplacez par vos identifiants
-    });
-    return this.http.post(API.NODEMYFILES+localStorage.getItem('token'), nodeData, { headers });
+  createNode(specNode:any,nodeData: any) {
+    return this.http.post(API.SPECIFICNODE+specNode+'/children?alf_ticket='+localStorage.getItem('token'), nodeData);
+  }
+
+  updateNode(specNode:any,nodeData: any) {
+    return this.http.put(API.SPECIFICNODE+specNode+'?alf_ticket='+localStorage.getItem('token'), nodeData);
   }
 
   addComment(nodeId:string,comment: any) {
@@ -127,7 +125,7 @@ export class NodeService {
   }
 
   getDeleteNode(): Observable<any> {
-    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}&include=path&incluse=permissions`);
+    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}&include=path&permissions`);
   }
 
 
@@ -168,4 +166,7 @@ export class NodeService {
     return this.http.get(`${API.PEOPLE}people/`+localStorage.getItem('userId')+`/groups?alf_ticket=${localStorage.getItem('token')}`);
   }
 
+  getMyRelativePath(folder:string,relativePath:string){
+    return this.http.get(`${API.SPECIFICNODE}${folder}/children?alf_ticket=${localStorage.getItem('token')}&relativePath=${relativePath}`);
+  }
 }

@@ -32,11 +32,11 @@
               </mat-form-field>
               <mat-form-field *ngIf="field.dataType === 'd:date'">
                 <mat-label>{{field.title}}</mat-label>
-                <input matInput [matDatepicker]="datepickers[field.name]" [formControlName]="field.name" [required]="field.mandatory"> <!-- Utilisation de [required] -->
-                <mat-datepicker-toggle matIconSuffix [for]="datepickers[field.name]" [required]="field.mandatory"></mat-datepicker-toggle> <!-- Utilisation de [required] -->
-                <mat-datepicker #datepickers[field.name]="matDatepicker"></mat-datepicker>
-                <mat-hint *ngIf="field.mandatory">Champ obligatoire</mat-hint> <!-- Ajout d'un indicateur visuel -->
-              </mat-form-field>
+                <input matInput [matDatepicker]="picker" [formControlName]="field.name" [required]="field.mandatory">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker [matDatepickerFilter]="myFilter"></mat-datepicker>
+                <mat-hint *ngIf="field.mandatory">Champ obligatoire</mat-hint>
+              </mat-form-field>              
               <br>
             </div>
           </ng-template>

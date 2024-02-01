@@ -46,7 +46,6 @@ export class UploadPopupComponent implements OnInit,AfterViewInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   metadataFields: any;
-  datepickers: { [key: string]: MatDatepicker<any> } = {};
   constructor(
     private ref: MatDialogRef<UploadPopupComponent>,
     private node: NodeService,

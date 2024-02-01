@@ -15,6 +15,21 @@ import { NodeNavigationService } from '../../service/node-navigation-service.ser
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit{
+changeRoot() {
+  localStorage.removeItem('relativePath');
+}
+  currentPermissions: any;
+  currentNode: any;
+  versionsHistory: any;
+  count: any;
+  parentStack: any[] = [];
+  nodeprecedent!: string;
+  fileUrl: any;
+  isLoading = false;
+  parentNameStack: any[] = [];
+  relativePathStack: any[] = [];
+  nodeTypeStak: any[] = [];
+  nodeIds: any;
   searchControl = new FormControl();
   searchResults: any[] = [];
   searchTerm: string = '';
@@ -23,8 +38,12 @@ export class DashboardComponent implements OnInit{
   userId!:string;
   opened=true;
   private searchTerms = new Subject<string>();
-  constructor(private dialog:MatDialog,private auth:AuthServiceService,private route:Router,
-    private node:NodeService,private searchService:SearchResultsService,
+  constructor(
+    private dialog:MatDialog,
+    private auth:AuthServiceService,
+    private route:Router,
+    private node:NodeService,
+    private searchService:SearchResultsService,
     private nodeNavigationService: NodeNavigationService
     ){
       this.route.events.pipe(
@@ -46,6 +65,37 @@ export class DashboardComponent implements OnInit{
       );
       console.log(this.searchResults);
     });
+  }
+
+
+  findChildren(nodeid: string): void {
+    localStorage.setItem("currentNodeId", nodeid);
+    if (this.parentStack.length === 0 || this.parentStack[this.parentStack.length - 1] !== nodeid) {
+      // Ajoutez nodeid à parentStack uniquement s'il est différent du dernier élément
+      this.parentStack.push(nodeid);
+      this.nodeprecedent = "Retour";
+    }
+
+    this.node.getSpecificNode(nodeid).subscribe(
+      (data: any) => {
+        this.currentNode = data['list'].entries;
+        this.count = data['list'].pagination;
+        console.log("Current stack", this.parentStack);
+
+        console.log(data);
+        console.log(this.currentNode);
+      },
+      (error: any) => {
+        if (error.status === 401) {
+          console.error('Unauthorized access. Please log in.');
+          this.route.navigate(['/login']);
+          this.auth.logout();
+        } else {
+          // Handle other errors, log them, or show appropriate messages.
+          console.error('An error occurred:', error);
+        }
+      }
+    );
   }
 
 onSearchInput(event: Event) {
@@ -80,6 +130,8 @@ performSearch(term: string) {
 
 
 
+
+
   titleChange(title:string){
     this.title=title;
   }
@@ -100,13 +152,28 @@ performSearch(term: string) {
     });
   }
 
+  
   OpenFolderFormPopup() {
+    let specNode='';
+    switch (localStorage.getItem('lastRoute')) {
+      case '/dashboard/repository':
+        specNode='-root-';
+        break;
+      case '/dashboard/shared':
+          specNode='-shared-';
+        break;
+      case '/dashboard/myfiles':
+          specNode='-my-';
+        break;
+      default:
+        break;
+    }
     const popup = this.dialog.open(FolderDialogComponent, {
-      width: '20%',
-      height: '30%',
-      data: { name: 'Create new folder' }
+      width: '35%',
+      height: 'auto',
+      data: { name: 'Nouveau dossier',specNode}
     });
-
+    this.findChildren(localStorage.getItem('currentNodeId')||'');
     popup.afterClosed().subscribe(item => {
       console.log(item);
     });
@@ -117,6 +184,7 @@ performSearch(term: string) {
 
   logout() {
     this.auth.logout(); // Assume this method clears the token
+    localStorage.removeItem('relativePath');
   }
   
   signout() {

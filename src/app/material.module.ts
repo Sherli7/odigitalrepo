@@ -78,7 +78,6 @@ const materialModules = [
   MatTooltipModule,
   DialogModule,
   MatDialogModule,
-  
 ];
 @NgModule({
   imports: [

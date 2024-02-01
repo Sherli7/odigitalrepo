@@ -11,30 +11,34 @@
       </span>
     </nav>
   </div>
-  <!-- Other content of mat-card 
-        Object { authorityId: "GROUP_EVERYONE",
-         name: "Consumer", accessStatus: "ALLOWED" }
-        entry: Object { isRoot: true, displayName: "ALFRESCO_ADMINISTRATORS",
-         id: "GROUP_ALFRESCO_ADMINISTRATORS" }
-  -->
+  <!-- Autre contenu de mat-card -->
 </mat-card>
+
 <mat-card class="card_style" *ngFor="let node of currentNode">
-  <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id);getName(node.entry.name,node.entry.nodeType)">
+  <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id); getName(node.entry.name, node.entry.nodeType)">
     <mat-card-header>
       <mat-card-title>{{ node.entry.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content class="card_subtitle">
-      <!-- Contenu existant pour les dossiers... -->
-    </mat-card-content>
+      <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
+        Créé il y a {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
+      <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
+        Modifié il y a {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
+        <p>{{ node.entry.description }}</p>  
+      </mat-card-content>
     <mat-card-actions class="actions">
-      <!-- Boutons conditionnés par les permissions -->
-      <button mat-button *ngIf="hasPermission(node.entry, 'Read')" (click)="previewFile(node.entry.id, node.entry.name)">
+      <button mat-button (click)="previewFile(node.entry.id, node.entry.name); $event.stopPropagation()" *ngIf="node.entry.isFile">
         <mat-icon>details</mat-icon> Détails
       </button>
-      <button mat-button *ngIf="hasPermission(node.entry, 'Download')" (click)="downloadFilesAsZips(node.entry.id, node.entry.name)">
+      <button mat-button (click)="downloadFilesAsZips(node.entry.id, node.entry.name); $event.stopPropagation()" *ngIf="node.entry.isFolder">
         <mat-icon>download</mat-icon> Télécharger le zip
       </button>
-      <!-- ...autres boutons... -->
+      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()" *ngIf="node.entry.isFile"> 
+        <mat-icon>delete</mat-icon> Delete
+      </button>
+      <button mat-button (click)="openUpdateFolder(node); $event.stopPropagation()">
+        <mat-icon>update</mat-icon> Update
+      </button>
     </mat-card-actions>
   </div>
   <div *ngIf="node.entry.isFile">
@@ -42,26 +46,27 @@
       <mat-card-title>{{ node.entry.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <!-- Affichage conditionnel basé sur les permissions et autres critères -->
       <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
-        Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}
-      </p>
+        Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
       <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
-        Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}
-      </p>
+        Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
     </mat-card-content>
     <mat-card-actions class="actions">
-      <!-- Boutons conditionnés par les permissions -->
-      <button mat-button *ngIf="hasPermission(node.entry, 'Read')" (click)="previewFile(node.entry.id, node.entry.name)">
+      <button mat-button (click)="previewFile(node.entry.id, node.entry.name); $event.stopPropagation()">
         <mat-icon>details</mat-icon> Détails
       </button>
-      <button mat-button *ngIf="hasPermission(node.entry, 'Download')" (click)="downloadFile(node.entry.id, node.entry.name)">
+      <button mat-button (click)="downloadFile(node.entry.id, node.entry.name); $event.stopPropagation()">
         <mat-icon>download</mat-icon> Télécharger
       </button>
-      <button mat-button *ngIf="hasPermission(node.entry, 'Delete')" (click)="trashcanAction(node.entry.id,node.entry.name,'trashcanDel')">
-        <mat-icon>delete</mat-icon> Supprimer
+      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()" *ngIf="node.entry.isFile"> 
+        <mat-icon>delete</mat-icon> Delete
       </button>
-      <!-- ...autres boutons... -->
-    </mat-card-actions>  
+      <button mat-button (click)="openUpdateFolder(node.entry.id); $event.stopPropagation()">
+        <mat-icon>update</mat-icon> Update
+      </button>
+      <button *ngIf="node.entry.isFile" mat-button (click)="versionHistory(node.entry.id); OpenVersionpopup(node.entry.id); $event.stopPropagation()">
+        <mat-icon>cloud_upload</mat-icon>Version history
+      </button>
+    </mat-card-actions>
   </div>
 </mat-card>

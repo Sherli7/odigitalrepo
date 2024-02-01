@@ -12,6 +12,8 @@ import { PdfViewerDialogComponent } from './pdf-viewer-dialog/pdf-viewer-dialog.
 import { VersionHistoryComponent } from './version-history/version-history.component';
 import { HttpResponse } from '@angular/common/http';
 import { UploadPopupComponent } from './modal/upload-popup/upload-popup.component';
+import { FolderDialogComponent } from './folder-dialog/folder-dialog.component';
+import { UpdateFolderComponent } from './folder-dialog/update-folder/update-folder.component';
 
 @Component({
     selector: 'app-abstract-repository',
@@ -27,10 +29,10 @@ export abstract class AbstractRepositoryComponent implements OnInit {
     fileUrl: any;
     isLoading = false;
     parentNameStack: any[] = [];
-    relativePathStack: any[] = [];
     nodeTypeStak: any[] = [];
     nodeIds: any;
     @Input() version!: any;
+  relativePathStack: any;
   
     constructor(
       protected sanitizer: DomSanitizer,
@@ -42,8 +44,9 @@ export abstract class AbstractRepositoryComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-      localStorage.removeItem('relativePath')
-      this.showFolder();
+      //localStorage.removeItem('relativePath')
+      //this.showFolder();
+      //alert(localStorage.getItem('relativePath'));
     }
     islogged: boolean | undefined;
     
@@ -90,21 +93,36 @@ export abstract class AbstractRepositoryComponent implements OnInit {
   }
   
 
+  
+
   searchFullText(tag:string){
     this.nodeService.searchFullText(tag).subscribe((result:any)=>{
     });
   }
+  
+  getNamess(newName: any) {
+    // Ajouter un '/' si ce n'est pas le premier élément
+    if (this.parentStack.length > 0) {
+        newName = '/' + newName;
+    }
+    this.parentStack.push(newName);
+    localStorage.setItem('relativePath', this.parentStack.join(''));
+}
 
+
+    versionHistory(version:string){
+      this.nodeService.getVersionHistory(version).subscribe((response:any)=>{
+        this.versionsHistory=response;
+      });
+    }
   
     getName(newName: any,nodeType:string) {
       // Vérifie si le dernier élément de la pile est différent du nouveau nom
   
       if (this.parentNameStack.length === 0 || this.parentNameStack[this.parentNameStack.length - 1] !== newName) {
         this.parentNameStack.push(newName);
-      }
-      if (this.relativePathStack.length === 0 || this.relativePathStack[this.relativePathStack.length - 1] !== newName) {
-        this.relativePathStack.push(newName);
-        localStorage.setItem('relativePath', this.relativePathStack.join('/'));
+        //this.relativePathStack.push(newName);
+        localStorage.setItem('relativePath', this.parentNameStack.join('/'));
         console.log(localStorage.getItem('relativePath'));
       }
       if (this.nodeTypeStak.length === 0 || this.nodeTypeStak[this.nodeTypeStak.length - 1] !== nodeType) {
@@ -115,17 +133,10 @@ export abstract class AbstractRepositoryComponent implements OnInit {
   
     }
   
-    versionHistory(version:string){
-      this.nodeService.getVersionHistory(version).subscribe((response:any)=>{
-        this.versionsHistory=response;
-      });
-    }
-  
     previous(): void {
       if (this.parentStack.length > 0) {
         this.parentStack.pop();
         this.parentNameStack.pop();
-        this.relativePathStack.pop(); // Retirer le dernier élément du chemin relatif
     
         // Mettre à jour le chemin dans le localStorage  
         if (this.parentStack.length > 0) {
@@ -133,14 +144,16 @@ export abstract class AbstractRepositoryComponent implements OnInit {
           this.findChildren(newParent);
         } else {
           this.showFolder();
-          this.relativePathStack = []; // Réinitialiser le chemin relatif pour le dossier racine
+          this.parentStack = []; // Réinitialiser le chemin relatif pour le dossier racine
         }
       } else {
         console.warn('No parent node.');
       }
     }
 
-    
+  
+  
+  
     trashcanAction(arg0: any, arg1: any,action:string) {
       const dialogRef = this.dialog.open(SnackbarComponent, {
         width: '40%',
@@ -150,7 +163,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
     
       dialogRef.afterClosed().subscribe((result:any) => {
           this.refreshData();
-          console.log(result);
+         // console.log(result);
       });
     }
    
@@ -171,42 +184,39 @@ export abstract class AbstractRepositoryComponent implements OnInit {
          data:{nodeid}
        });
        _popup.afterClosed().subscribe(item=>{
-         console.log(item);
+         //console.log(item);
        })
      }
   
-    findChildren(nodeid: string): void {
-        localStorage.setItem("currentNodeId",nodeid)
-        if (this.parentStack.length === 0 || this.parentStack[this.parentStack.length - 1] !== nodeid) {
-          // Ajoutez nodeid à parentStack uniquement s'il est différent du dernier élément
-          this.parentStack.push(nodeid);
-          this.nodeprecedent="Retour";
-        }
+     findChildren(nodeid: string): void {
+      localStorage.setItem("currentNodeId", nodeid);
+      if (this.parentStack.length === 0 || this.parentStack[this.parentStack.length - 1] !== nodeid) {
+        // Ajoutez nodeid à parentStack uniquement s'il est différent du dernier élément
+        this.parentStack.push(nodeid);
+        this.nodeprecedent = "Retour";
+      }
   
-        this.nodeService.getSpecificNode(nodeid).subscribe(
-          (data: any) => {
-            this.currentNode = data['list'].entries;
-            this.currentPermissions = data['list'].permissions;
-            this.count = data['list'].pagination;
-            console.log("Current stack", this.parentStack);
-    
-            console.log(data);
-            console.log(this.currentNode);
-          },
-          (error: any) => {
-            if (error.status === 401) {
-              console.error('Unauthorized access. Please log in.');
-              this.router.navigate(['/login']);
-              this.auth.logout();
-            } else {
-              // Handle other errors, log them, or show appropriate messages.
-              console.error('An error occurred:', error);
-            }
+      this.nodeService.getSpecificNode(nodeid).subscribe(
+        (data: any) => {
+          this.currentNode = data['list'].entries;
+          this.count = data['list'].pagination;
+          console.log("Current stack", this.parentStack);
+  
+          console.log(data);
+          console.log(this.currentNode);
+        },
+        (error: any) => {
+          if (error.status === 401) {
+            console.error('Unauthorized access. Please log in.');
+            this.router.navigate(['/login']);
+            this.auth.logout();
+          } else {
+            // Handle other errors, log them, or show appropriate messages.
+            console.error('An error occurred:', error);
           }
-        );
-      
+        }
+      );
     }
-
     hasPermission(node: any, permissionName: string): boolean {
       this.currentPermissions = [...node.permissions.inherited, ...node.permissions.locallySet];
       return this.currentPermissions.some((perm:any) => perm.name === permissionName && perm.accessStatus === 'ALLOWED');
@@ -229,7 +239,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
             } else {
               
             this.isLoading = false;
-              console.log('ZIP is not ready yet, checking again in a few seconds...');
+             // console.log('ZIP is not ready yet, checking again in a few seconds...');
               setTimeout(checkStatus, 5000); // Check every 5 seconds
             }
           });
@@ -238,7 +248,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
         checkStatus();
       }, (error: any) => {
         this.isLoading = false;
-        console.error('Error initiating zip download:', error);
+        //console.error('Error initiating zip download:', error);
       });
     }
     
@@ -248,9 +258,62 @@ export abstract class AbstractRepositoryComponent implements OnInit {
         fileSaverSaveAs(blob, `${filename}.zip`);
       });
     }
+
+    specNode(){
+      let specNode='';
+      switch (localStorage.getItem('lastRoute')) {
+        case '/dashboard/repository':
+          specNode='-root-';
+          break;
+        case '/dashboard/shared':
+            specNode='-shared-';
+          break;
+        case '/dashboard/myfiles':
+            specNode='-my-';
+          break;
+        default:
+          break;
+      }
+      return specNode;
+    }
   
-    abstract showFolder(): void;
+    showFolder(): void {
+      //let specNode=this.specNode();
+      this.nodeService.getFolderRoot(this.specNode()).subscribe(
+        (data: any) => {
+          this.currentNode = data['list'].entries;
+          this.count = data['list'].pagination;
+          this.parentStack.push(this.currentNode[1].entry.parentId);
+          localStorage.setItem("currentNodeId", this.currentNode[1].entry.id);
+          console.log("Initial stack", this.parentStack[0]);
+          console.log(data);
+          console.log(this.currentNode);
+        },
+        (error: any) => {
+          if (error.status === 401) {
+            console.error('Unauthorized access. Please log in.');
+            this.auth.logout();
+            this.router.navigate(['/login']);
+          } else {
+            // Handle other errors, log them, or show appropriate messages.
+            console.error('An error occurred:', error);
+          }
+        }
+      );
+    }
   
+
+    openUpdateFolder(node?: any) { // Vous pouvez passer le nœud actuel si nécessaire
+      const dialogRef = this.dialog.open(UpdateFolderComponent, {
+        width: '250px',
+        data: { node: node } // Vous passez ici les données nécessaires au formulaire
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('La boîte de dialogue a été fermée'+node.entry.id, result);
+        // Ici vous pouvez gérer le résultat du formulaire, par exemple rafraîchir les données affichées
+      });
+    }
+
     OpenUploadpopup():void {
       const uploadDialogRef = this.dialog.open(UploadPopupComponent, {
         width: '80%',
@@ -305,12 +368,12 @@ export abstract class AbstractRepositoryComponent implements OnInit {
             window.URL.revokeObjectURL(link.href);
             link.remove();
           } else {
-            console.error('Unable to extract file name from URL');
+         //   console.error('Unable to extract file name from URL');
             // Handle the scenario where the file name cannot be extracted
           }
         },
         (error: any) => {
-          console.error('Error downloading file:', error);
+        //  console.error('Error downloading file:', error);
           // Handle error, show a message, etc.
         }
       );
@@ -325,7 +388,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
             this.openPdfViewer(pdfUrl,filename);
           },
           (error: any) => {
-            console.error('Error downloading file:', error);
+          //  console.error('Error downloading file:', error);
           }
         );
       } else if (this.isWordFile(filename)) {
@@ -336,11 +399,11 @@ export abstract class AbstractRepositoryComponent implements OnInit {
             this.openWordViewer(wordUrl, filename);
           },
           (error: any) => {
-            console.error('Error downloading file:', error);
+           // console.error('Error downloading file:', error);
           }
         );
       } else {
-        console.log('Type de fichier non pris en charge pour la prévisualisation.');
+       // console.log('Type de fichier non pris en charge pour la prévisualisation.');
       }
     }
   
@@ -388,7 +451,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
   getFileVersionHistory(nodeId: string): void {
     this.nodeService.getVersionHistory(nodeId).subscribe(
       (versionHistory: any) => {
-        console.log('Version history:', versionHistory);
+       // console.log('Version history:', versionHistory);
         // Process version history as needed
       },
       (error: any) => {
@@ -404,7 +467,7 @@ export abstract class AbstractRepositoryComponent implements OnInit {
         fileSaverSaveAs(file, filename);
       },
       (error: any) => {
-        console.error('Error downloading file version:', error);
+       // console.error('Error downloading file version:', error);
       }
     );
   }

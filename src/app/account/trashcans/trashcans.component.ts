@@ -16,30 +16,6 @@ import { DatePipe } from '@angular/common';
 export class TrashcansComponent extends AbstractRepositoryComponent implements OnInit{
 checkedNodes: { [id: string]: boolean } = {};
  currentTrash:any;
-  override showFolder(): void {
-    this.nodeService.getFolderRoot().subscribe(
-      (data: any) => {
-        this.currentTrash = data['list'].entries;
-        this.count = data['list'].pagination;
-        this.parentStack.push(this.currentTrash[1].entry.parentId);
-        //localStorage.setItem("currentNodeId", this.currentTrash[1].entry.id);
-        console.log("Initial stack", this.parentStack[0]);
-        console.log(data);
-        console.log(this.currentTrash);
-      },
-      (error: any) => {
-        if (error.status === 401) {
-          console.error('Unauthorized access. Please log in.');
-          this.auth.logout();
-          this.router.navigate(['/login']);
-        } else {
-          // Handle other errors, log them, or show appropriate messages.
-          console.error('An error occurred:', error);
-        }
-      }
-    );
-  }
-
   constructor(
     private datePipe:DatePipe,
     protected override sanitizer: DomSanitizer,
@@ -53,6 +29,7 @@ checkedNodes: { [id: string]: boolean } = {};
     super(sanitizer, dialog, node, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
   }
   override ngOnInit(): void {
+    this.showFolder();
     this.node.getDeleteNode().subscribe(
       (data: any) => {
        // this.currentNode = data['list'].entries;

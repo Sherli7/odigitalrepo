@@ -1,20 +1,70 @@
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0 80px; /* Ajustez ce padding selon vos besoins */
-  
-    .mat-form-field {
-      width: 100%; /* Assurez-vous que la largeur ne dépasse pas la largeur du dialogue */
-      margin-bottom: 15px;
-    }
-  }
-  .field {
-    border-top-left-radius: var(--mdc-filled-text-field-container-shape);
-    border-top-right-radius: var(--mdc-filled-text-field-container-shape);
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 0;
-  }
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px; /* Réglez la hauteur selon vos besoins */
+}
 
-  
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+mat-form-field.full-width textarea {
+  min-height: 100px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  margin-right: 8px;
+}
+
+mat-hint {
+  color: grey;
+  font-size: 12px;
+}
+
+/* Style global pour le titre centré */
+.title {
+  text-align: center;
+  margin-bottom: 16px; /* Ajoutez une marge au bas du titre */
+}
+
+/* Style pour la bordure de l'outline lorsqu'il est au focus */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  color: green;
+}
+
+/* Style pour la légende de l'outline lorsqu'il est au focus */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-start,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-gap,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-end {
+  border-color: green;
+}
+
+/* Style pour la bordure de l'outline même quand il n'est pas au focus */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: transparent;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-gap,
+.mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-color: transparent;
+}
+
+/* Style pour la légende de l'outline quand il est au focus */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: green;
+}
+
+/* Styles existants inchangés ... */
+
+/* Ajoutez ici les autres styles existants que vous avez déjà définis */
+

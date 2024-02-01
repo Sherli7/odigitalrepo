@@ -19,8 +19,12 @@ restoreDeletedNode(arg0: any,arg1: any) {
 throw new Error('Method not implemented.');
 }
 
-showFolder(): void {
-  this.nodeService.getFolderRoot().subscribe(
+showTrashFolder(): void {
+  // Check if a relative path exists in localStorage
+  const relativePath = localStorage.getItem('relativePath');
+  // Determine the node parameter based on the existence of relativePath
+  const nodeParam = relativePath ? '&relativePath=' + relativePath : '';
+  this.nodeService.getSpecificNode(nodeParam).subscribe(
     (data: any) => {
       this.currentNode = data['list'].entries;
       this.count = data['list'].pagination;
@@ -61,9 +65,8 @@ showFolder(): void {
 
   override ngOnInit(): void {
     super.ngOnInit(); // Call to ngOnInit of AbstractRepositoryComponent if it's implemented
-
-    // Fetch deleted nodes on component initialization
     this.fetchDeletedNodes();
+    this.showTrashFolder();
   }
 
   // A separate method to fetch deleted nodes, for better structure and readability

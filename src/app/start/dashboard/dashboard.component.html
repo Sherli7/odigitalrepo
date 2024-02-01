@@ -1,28 +1,28 @@
 <div class="dashboard">
   <div class="sidebar">
     <div class="sidebar">
-      <div class="sidebar-item active" routerLink="/dashboard/home">
+      <div class="sidebar-item active" routerLink="/dashboard/home" (click)="changeRoot()">
         <span class="material-icons">home</span>
         <span>Home</span>
     </div>
-    <div class="sidebar-item" routerLink="/dashboard/repository">
+    <div class="sidebar-item" routerLink="/dashboard/repository" (click)="changeRoot()">
         <span class="material-icons">folder</span>
         <span>Repository</span>
     </div>
-    <div class="sidebar-item" routerLink="/dashboard/myfiles">
+    <div class="sidebar-item" routerLink="/dashboard/myfiles" (click)="changeRoot()">
       <span class="material-icons">folder_shared</span>
         <span>My file</span>
     </div>
-    <div class="sidebar-item" routerLink="/dashboard/shared">
+    <div class="sidebar-item" routerLink="/dashboard/shared" (click)="changeRoot()">
       <span class="material-icons">share</span>
       <span>Shared</span>
   </div>
-  <div class="sidebar-item" routerLink="/dashboard/trashcan">
+  <div class="sidebar-item" routerLink="/dashboard/trashcan" (click)="changeRoot()">
     <span class="material-icons">recycling</span>
     <span>Trash</span>
 </div>
     <mat-divider></mat-divider>
-    <div class="sidebar-item" routerLink="/dashboard/account">
+    <div class="sidebar-item" routerLink="/dashboard/account" (click)="changeRoot()">
         <span class="material-icons">account_circle</span>
         <span>{{userId}}</span>
     </div>
