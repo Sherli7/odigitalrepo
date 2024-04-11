@@ -11,62 +11,75 @@
       </span>
     </nav>
   </div>
-  <!-- Autre contenu de mat-card -->
+  <!-- Autres contenus de mat-card... -->
 </mat-card>
 
-<mat-card class="card_style" *ngFor="let node of currentNode">
-  <div *ngIf="node.entry.isFolder" (click)="findChildren(node.entry.id); getName(node.entry.name, node.entry.nodeType)">
-    <mat-card-header>
+<!-- Itérer sur les noeuds courants -->
+<ng-container *ngFor="let node of currentNode">
+  <!-- Vérifier si c'est un dossier et si son nom n'est pas exclu -->
+  <mat-card *ngIf="node.entry.isFolder && !excludedFolderNames.includes(node.entry.name)" class="card_style">
+    <mat-card-header (click)="findChildren(node.entry.id); getName(node.entry.name, node.entry.nodeType)">
       <mat-card-title>{{ node.entry.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content class="card_subtitle">
       <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
-        Créé il y a {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
+        Créé {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}
+      </p>
       <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
-        Modifié il y a {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
-        <p>{{ node.entry.description }}</p>  
-      </mat-card-content>
+        Modifié {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}
+      </p>
+    </mat-card-content>
     <mat-card-actions class="actions">
-      <button mat-button (click)="previewFile(node.entry.id, node.entry.name); $event.stopPropagation()" *ngIf="node.entry.isFile">
-        <mat-icon>details</mat-icon> Détails
+      <button *ngIf="!['User Homes', 'Shared'].includes(node.entry.name) && specialFolderActions.includes('Copier')" mat-button (click)="openCopyAndMove(node.entry); $event.stopPropagation()">
+        <mat-icon class="material-symbols-outlined">file_copy</mat-icon> Copier
       </button>
-      <button mat-button (click)="downloadFilesAsZips(node.entry.id, node.entry.name); $event.stopPropagation()" *ngIf="node.entry.isFolder">
-        <mat-icon>download</mat-icon> Télécharger le zip
+      
+      <button mat-button (click)="openCopyAndMove(node.entry); $event.stopPropagation()">
+        <mat-icon class="material-symbols-outlined">move_up</mat-icon> Déplacer
       </button>
-      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()" *ngIf="node.entry.isFile"> 
-        <mat-icon>delete</mat-icon> Delete
+      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()">
+        <mat-icon>delete</mat-icon> Supprimer
       </button>
-      <button mat-button (click)="openUpdateFolder(node); $event.stopPropagation()">
-        <mat-icon>update</mat-icon> Update
+      <button mat-button (click)="openUpdateFolder(node.entry); $event.stopPropagation()">
+        <mat-icon>edit</mat-icon> Modifier
       </button>
+      <!-- Ajouter d'autres actions si nécessaire -->
     </mat-card-actions>
-  </div>
-  <div *ngIf="node.entry.isFile">
+  </mat-card>
+
+  <!-- Vérifier si c'est un fichier -->
+  <mat-card *ngIf="node.entry.isFile" class="card_style">
     <mat-card-header>
       <mat-card-title>{{ node.entry.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <p *ngIf="node.entry.createdAt === node.entry.modifiedAt">
-        Créé il y a de cela {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}</p>
+        Créé {{ getTimeDate(node.entry.createdAt) }} par {{ node.entry.createdByUser.displayName }}
+      </p>
       <p *ngIf="node.entry.createdAt !== node.entry.modifiedAt">
-        Modifié il y a de cela {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}</p>
+        Modifié {{ getTimeDate(node.entry.modifiedAt) }} par {{ node.entry.modifiedByUser.displayName }}
+      </p>
     </mat-card-content>
     <mat-card-actions class="actions">
-      <button mat-button (click)="previewFile(node.entry.id, node.entry.name); $event.stopPropagation()">
-        <mat-icon>details</mat-icon> Détails
+      <button mat-button (click)="previewFile(node.entry, node.entry.name); $event.stopPropagation()">
+        <mat-icon>visibility</mat-icon> Prévisualiser
       </button>
       <button mat-button (click)="downloadFile(node.entry.id, node.entry.name); $event.stopPropagation()">
         <mat-icon>download</mat-icon> Télécharger
       </button>
-      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()" *ngIf="node.entry.isFile"> 
-        <mat-icon>delete</mat-icon> Delete
+      <button mat-button (click)="openCopyAndMove(node.entry); $event.stopPropagation()">
+        <mat-icon class="material-symbols-outlined">file_copy</mat-icon> Copier
       </button>
-      <button mat-button (click)="openUpdateFolder(node.entry.id); $event.stopPropagation()">
-        <mat-icon>update</mat-icon> Update
+      <button mat-button (click)="openCopyAndMove(node.entry); $event.stopPropagation()">
+        <mat-icon class="material-symbols-outlined">move_up</mat-icon> Déplacer
       </button>
-      <button *ngIf="node.entry.isFile" mat-button (click)="versionHistory(node.entry.id); OpenVersionpopup(node.entry.id); $event.stopPropagation()">
-        <mat-icon>cloud_upload</mat-icon>Version history
+      <button mat-button (click)="versionHistory(node.entry.id); OpenVersionpopup(node.entry.id); $event.stopPropagation()">
+        <mat-icon>history</mat-icon> Historique de versions
       </button>
+      <button mat-button (click)="trashcanAction(node.entry.id, node.entry.name, 'temporaire'); $event.stopPropagation()">
+        <mat-icon>delete</mat-icon> Supprimer
+      </button>
+      <!-- Ajouter d'autres actions si nécessaire -->
     </mat-card-actions>
-  </div>
-</mat-card>
+  </mat-card>
+</ng-container>

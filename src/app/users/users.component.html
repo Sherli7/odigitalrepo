@@ -1,0 +1,49 @@
+<mat-toolbar color="primary">
+    <span>Gestion des Utilisateurs et des Groupes</span>
+  </mat-toolbar>
+  
+  <div class="container">
+    <mat-tab-group>
+      <mat-tab label="Utilisateurs">
+        <mat-list>
+          <mat-list-item *ngFor="let user of users">
+            {{ user.entry.firstName }} {{ user.entry.lastName }}
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="editUser(user)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteUser(user)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openAddMemberDialog(user, 'PERSON')">
+              <mat-icon>group_add</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+        <button mat-fab color="primary" (click)="addUser()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-tab>
+      <mat-tab label="Groupes">
+        <mat-list>
+          <mat-list-item *ngFor="let group of groups">
+            {{ group.entry.displayName }}
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="editGroup(group)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteGroup(group)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openAddMemberDialog(group, 'GROUP')">
+              <mat-icon>person_add</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+        <button mat-fab color="primary" (click)="addGroup()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  

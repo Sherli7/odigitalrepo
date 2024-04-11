@@ -13,8 +13,6 @@ import { CustumSnackbarService } from '../../custom-snackbar/custum-snackbar.ser
 export class SnackbarComponent {
   messagerror!: string;
   
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
     public dialogRef: MatDialogRef<SnackbarComponent>,

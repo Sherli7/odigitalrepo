@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { API } from '../../environnement/environnement';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -10,16 +9,66 @@ export class NodeService {
 
   constructor(private http: HttpClient) { }
 
-  getFolderRoot(specNode:string): Observable<any> {
-      return this.http.get(API.SPECIFICNODE+specNode+'/children?alf_ticket='+localStorage.getItem('token')+'&include=permissions,path');
+  copyNode(nodeId: string, targetParentId: string) {
+    const url = `${API.SPECIFICNODE}${nodeId}/copy?alf_ticket=${localStorage.getItem('token')}`;
+    const body = { targetParentId: targetParentId };
+    return this.http.post(url, body);
   }
+  getFolderRoot(specNode:string): Observable<any> {
+      return this.http.get(API.SPECIFICNODE+specNode+'/children?alf_ticket='+localStorage.getItem('token')+'&include=isFavorite,permissions,isLocked');
+  }
+
+  moveNode(nodeId: string, targetParentId: string): Observable<any> {
+    const url = `${API.SPECIFICNODE}${nodeId}/move?alf_ticket=${localStorage.getItem('token')}`;
+    let body = { targetParentId };
+    return this.http.post(url, body);
+  }
+
+  getPeopleFavorite(): Observable<any> {
+    return this.http.get(API.PEOPLE+'/people/-me-/favorites?alf_ticket='+localStorage.getItem('token')+"&include=path");
+}
+
+getPeople(): Observable<any> {
+  return this.http.get(API.PEOPLE+'/people?alf_ticket='+localStorage.getItem('token'));
+}
+getPeopleFavoriteID(favoriteId:string): Observable<any> {
+  return this.http.get(API.PEOPLE+'/people/-me-/favorites/'+favoriteId+'?alf_ticket='+localStorage.getItem('token')+"&include=path");
+}
   
+removeFavorite(favoriteId: string): Observable<any> {
+  const url = `${API.PEOPLE}/people/-me-/favorites/${favoriteId}?alf_ticket=${localStorage.getItem('token')}`;
+  return this.http.delete<any>(url);
+}
+
+favoriteID(guid: string,f:string): Observable<any> {
+  const url = `${API.PEOPLE}/people/-me-/favorites`; // Constructing the endpoint URL
+  let content='';
+  if(f=='file'){
+    content='file'
+  }else{
+    content='folder'
+  }
+  const body = {
+    target: {
+      [content]:{
+        guid: guid
+      }
+    }
+  };
+
+  const params = new HttpParams().set('alf_ticket', localStorage.getItem('token')||'');
+
+  return this.http.post(url, body, { params: params }); // Using HttpParams to include the token as query parameter
+}
+
+
+
   getCurrentNode(event: string): Observable<any> {
-    return this.http.get(`${API.SPECIFICNODE}${event}?alf_ticket=${localStorage.getItem('token')}&include=permissions,path`);
+    return this.http.get(`${API.SPECIFICNODE}${event}?alf_ticket=${localStorage.getItem('token')}&include=isFavorite,properties,permissions`);
   }
 
   getSpecificNode(event: string): Observable<any> {
-    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}&include=permissions,path`);
+    return this.http.get(`${API.SPECIFICNODE}${event}/children?alf_ticket=${localStorage.getItem('token')}&include=isFavorite`);
   }
 
   uploadFile(data: any): Observable<any> {
@@ -27,7 +76,7 @@ export class NodeService {
   }
 
   getNodeTypeDefinition(): Observable<any> {
-    return this.http.get(`${API.NODETYPE}?alf_ticket=${localStorage.getItem('token')}&include=path`);
+    return this.http.get(`${API.NODETYPE}?alf_ticket=${localStorage.getItem('token')}&fields=nodeType`);
   }
   
 
@@ -81,6 +130,20 @@ export class NodeService {
   }
 
 
+  moveOrCopyNode(nodeId: string, targetParentId: string, newName?: string): Observable<any> {
+    const moveUrl = `${API.SPECIFICNODE}/${nodeId}/move?alf_ticket='${localStorage.getItem('token')}`;
+
+    const body = {
+      targetParentId: targetParentId,
+      name: newName ? newName : undefined
+    };
+
+    return this.http.post(moveUrl, body).pipe(
+      catchError(error => {
+        return throwError(error);
+      })
+    );
+  }
   createNode(specNode:any,nodeData: any) {
     return this.http.post(API.SPECIFICNODE+specNode+'/children?alf_ticket='+localStorage.getItem('token'), nodeData);
   }
@@ -103,18 +166,9 @@ export class NodeService {
   searchFullText(query: string): Observable<any> {
     const requestBody = {
       query: {
-        query: query ? `${query} AND TYPE:"cm:content"` : `+TYPE:"cm:content"`,
-        language: 'afts'
+        query: `SELECT * FROM cmis:folder WHERE cmis:name LIKE '${query}%'`,
+        language:'cmis'
       },
-      paging: {
-        maxItems: '50',  // Nombre maximum d'éléments à retourner
-        skipCount: '0'   // Nombre d'éléments à ignorer (pour la pagination)
-      },
-      sort: [{
-        type: "FIELD", 
-        field: "cm:name", 
-        ascending: "false"
-      }]
     };
     return this.http.post(API.SEARCHAPI+'?alf_ticket='+localStorage.getItem('token'), requestBody);
   }
@@ -125,7 +179,7 @@ export class NodeService {
   }
 
   getDeleteNode(): Observable<any> {
-    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}&include=path&permissions`);
+    return this.http.get(`${API.TRASHCANAPI}?alf_ticket=${localStorage.getItem('token')}&include=path,permissions`);
   }
 
 
@@ -145,12 +199,12 @@ export class NodeService {
   }
   
   getAccountProperties(personId:String){
-    return this.http.get(API.PEOPLE+'people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'));
+    return this.http.get(API.PEOPLE+'/people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'));
   }
 
   getAccountAvatar(): Observable<any> {
     // Assuming API.PEOPLE is the correct endpoint and you have to replace '-me-' with the actual personId
-    return this.http.get(`${API.PEOPLE}people/`+localStorage.getItem('userId')+`/avatar?alf_ticket=${localStorage.getItem('token')}`,{ responseType: 'blob' });
+    return this.http.get(`${API.PEOPLE}/people/`+localStorage.getItem('userId')+`/avatar?alf_ticket=${localStorage.getItem('token')}`,{ responseType: 'blob' });
   }
 
   updatePassword(oldPassword: string, newPassword: string): Observable<any> {
@@ -159,11 +213,15 @@ export class NodeService {
       password: newPassword
     };
 
-    return this.http.put(API.PEOPLE+'people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'), body); // Replace with your API endpoint
+    return this.http.put(API.PEOPLE+'/people/'+localStorage.getItem('userId')+'?alf_ticket='+localStorage.getItem('token'), body); // Replace with your API endpoint
   }
 
   getMyGroup(){
-    return this.http.get(`${API.PEOPLE}people/`+localStorage.getItem('userId')+`/groups?alf_ticket=${localStorage.getItem('token')}`);
+    return this.http.get(`${API.PEOPLE}/people/`+localStorage.getItem('userId')+`/groups?alf_ticket=${localStorage.getItem('token')}`);
+  }
+
+  getGroups(){
+    return this.http.get(`${API.PEOPLE}/groups?alf_ticket=${localStorage.getItem('token')}&where=(isRoot=true)`);
   }
 
   getMyRelativePath(folder:string,relativePath:string){

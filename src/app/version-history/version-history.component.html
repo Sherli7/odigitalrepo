@@ -48,18 +48,32 @@
   </table>
 </div>
 
-<!-- update-file-dialog.component.html -->
-<form (submit)="onSubmit()">
-  <input type="file" (change)="onFileSelected($event)" />
-  <label>
-    <input type="radio" [(ngModel)]="majorVersion" [value]="false" name="versionType" />
-    Minor changes
-  </label>
-  <label>
-    <input type="radio" [(ngModel)]="majorVersion" [value]="true" name="versionType" />
-    Major changes
-  </label><br>
-  <textarea [(ngModel)]="comment" name="comment" placeholder="Comments" style="margin: 15px;"></textarea>
-  <button type="submit">Update File</button>
+<form (submit)="onSubmit()" class="upload-form">
+  <div class="file-input">
+    <input type="file" (change)="onFileSelected($event)" id="file" hidden />
+    <label for="file" class="mat-stroked-button file-input-label" [class.file-selected]="selectedFileName">
+      <span *ngIf="selectedFileName; else selectFileLabel">
+        {{ selectedFileName }}
+      </span>
+      <ng-template #selectFileLabel>
+        Sélectionnez un fichier <mat-icon>attach_file</mat-icon>
+      </ng-template>
+    </label>
+    
+  </div>
+
+  <mat-radio-group [(ngModel)]="majorVersion" name="versionType" class="version-type-radios">
+    <mat-radio-button value="false">Changements mineurs</mat-radio-button>
+    <mat-radio-button value="true">Changements majeurs</mat-radio-button>
+  </mat-radio-group>
+
+  <mat-form-field appearance="outline" class="full-width comment-textarea">
+    <mat-label>Commentaire</mat-label>
+    <textarea matInput [(ngModel)]="comment" name="comment" placeholder="Comments"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button class="submit" type="submit">Impoter un fichier</button>
 </form>
+
+
 

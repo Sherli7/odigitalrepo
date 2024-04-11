@@ -15,8 +15,6 @@ import { NodeNavigationService } from '../../service/node-navigation-service.ser
   styleUrls: ['./repository.component.scss']
 })
 export class RepositoryComponent extends AbstractRepositoryComponent {
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
   constructor(
     protected override sanitizer: DomSanitizer,
@@ -26,10 +24,11 @@ export class RepositoryComponent extends AbstractRepositoryComponent {
     protected override router: Router,
     protected override cdr: ChangeDetectorRef,
     private searchResultsService: SearchResultsService,
-    private nodeNavigationService: NodeNavigationService
-  ) {
-    super(sanitizer, dialog, nodeService, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
-  }
+    private nodeNavigationService: NodeNavigationService,
+    protected override authService:AuthServiceService
+    ) {
+      super(sanitizer, dialog, nodeService, auth, router, cdr,authService); // Appel du constructeur de la classe parente avec les arguments requis
+    }
   parentNameStacks:any[]= [];
 
   override ngOnInit(): void {

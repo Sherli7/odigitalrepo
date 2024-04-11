@@ -25,9 +25,10 @@ checkedNodes: { [id: string]: boolean } = {};
     protected override router: Router,
     protected override cdr: ChangeDetectorRef,
     public _snackbar:CustumSnackbarService,
-  ) {
-    super(sanitizer, dialog, node, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
-  }
+    protected override authService:AuthServiceService
+    ) {
+      super(sanitizer, dialog, node, auth, router, cdr,authService); // Appel du constructeur de la classe parente avec les arguments requis
+    }
   override ngOnInit(): void {
     this.showFolder();
     this.node.getDeleteNode().subscribe(

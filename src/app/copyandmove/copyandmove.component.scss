@@ -1,0 +1,63 @@
+
+mat-nav-list {
+  width: 100%; /* Prend toute la largeur disponible */
+  max-height: 400px; /* Définir une hauteur maximale */
+  overflow-y: auto; /* Active le défilement vertical si le contenu dépasse */
+}
+
+/* Autres styles... */
+
+.toolbar-title {
+  flex: 1;
+  text-align: center;
+  font-weight: bold; /* Si vous voulez que le titre soit en gras */
+}
+
+/* Assurez-vous que les boutons ne chevauchent pas le titre sur les petits écrans */
+@media (max-width: 600px) {
+  .toolbar-title {
+    display: none; /* ou ajustez selon les besoins */
+  }
+}
+
+
+/* Style des éléments de la liste */
+.folder-item, a.mat-list-item {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Style des icônes à l'intérieur des éléments de la liste */
+.folder-item mat-icon, a.mat-list-item mat-icon {
+  margin-right: 10px;
+}
+
+/* Style des éléments de la liste au survol */
+a.mat-list-item:hover {
+  background-color: #e0e0e0; /* Couleur de fond au survol */
+  cursor: pointer; /* Change le curseur pour indiquer qu'il s'agit d'un élément cliquable */
+  color: #757575; /* Change la couleur du texte et de l'icône au survol */
+}
+
+/* Responsivité du composant de dialogue */
+.mat-dialog-container {
+  width: 80vw; /* Largeur par défaut pour les écrans de taille moyenne à grande */
+  max-width: 500px; /* Une largeur maximale pour s'assurer que la boîte de dialogue n'est jamais trop grande */
+}
+
+@media (max-width: 768px) {
+  .mat-dialog-container {
+    width: 80vw; /* Largeur dynamique pour les écrans moyens */
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-dialog-container {
+    width: 95vw; /* Largeur presque complète pour les petits écrans */
+  }
+}
+
+/* Aucune règle spéciale pour mat-toolbar sur les petits écrans n'est nécessaire */

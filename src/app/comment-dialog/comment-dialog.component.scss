@@ -1,34 +1,106 @@
-/* CSS personnalisé pour le formulaire */
-.custom-form {
-    /* Ajoutez ici vos styles personnalisés pour le formulaire */
-    margin: 20px auto; /* Pour centrer le formulaire horizontalement */
-    padding: 20px;
-    background-color: #f0f0f0;
-    text-align: center; /* Pour centrer le bouton */
-  }
-  
-  /* CSS personnalisé pour le champ de formulaire */
-  .custom-form-field {
-    /* Ajoutez ici vos styles personnalisés pour le champ de formulaire */
-    width: 100%;
-    border: none; /* Pour supprimer la bordure */
-  }
-  
-  /* CSS personnalisé pour la zone de texte */
-  .custom-textarea {
-    /* Ajoutez ici vos styles personnalisés pour la zone de texte */
-    width: 100%;
-    height: 100px;
-    resize: vertical;
-    border: none; /* Pour supprimer la bordure */
-  }
-  
-  /* CSS personnalisé pour le bouton */
-  .custom-button {
-    /* Ajoutez ici vos styles personnalisés pour le bouton */
-    margin-top: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none; /* Pour supprimer la bordure */
-  }
-  
+
+h2 {
+  font-size: 1.5em;
+  text-align: center;
+}
+.chat-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 50px auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  word-wrap: break-word; /* Pour que les mots longs se divisent sur plusieurs lignes */
+}
+
+
+.chat-message .sender {
+  font-weight: bold;
+  color: #333;
+}
+
+.chat-message.other {
+  margin-right: 15px;
+  background-color: #9b9d9e;
+  text-align: start;
+}
+
+.chat-message.me {
+  margin-left: 15px;
+  background-color: #3b94c7;
+  text-align: end;
+}
+.chat-input {
+  display: flex;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+.chat-input input[type="text"] {
+  flex: 1;
+  padding: 10px 276px 17px 0;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: #82b435;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.message-info{
+  text-align: end;
+}
+
+.chat-input button:hover {
+  background-color: #45a049;
+}
+
+/* Style pour le menu */
+.mat-menu-panel {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Style pour les éléments du menu */
+.mat-menu-content {
+  padding: 8px 0;
+}
+
+/* Style pour les éléments du menu */
+.mat-menu-item {
+  padding: 8px 16px;
+  color: #333;
+}
+
+/* Style pour les éléments du menu au survol */
+.mat-menu-item:hover {
+  background-color: #f0f0f0;
+}
+.delMenu{
+margin-bottom: -8px;
+  font-size: 21px;
+  margin-right: 10px;
+  margin-left: -7px;
+}

@@ -11,6 +11,7 @@ import { FolderDialogComponent } from '../folder-dialog.component';
   styleUrl: './update-folder.component.scss'
 })
 export class UpdateFolderComponent {
+
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     messagerror!: string;
@@ -22,31 +23,36 @@ export class UpdateFolderComponent {
       private _snackBar: MatSnackBar,
       private dialogRef: MatDialogRef<FolderDialogComponent>){
         this.myForm = this.fb.group({
-          name: ['', Validators.required],
-          title: [''],
-          description: ['']
+          name: [this.data.node.name, Validators.required],
+          title: [this.data.node.title],
+          description: [this.data.node.description]
         });
       }
-        
+    nodePreview:any;
     myForm!: FormGroup;
     showPreview = false;
   
     ngOnInit() {
+      this.nodePreview=this.data.node;
       this.getCurrentNode();
     }
   
+    cancel() {
+      this.dialogRef.close();
+    }
     getCurrentNode(){
-      this.node.getCurrentNode(this.data.node.entry.id).subscribe((res:any)=>{
+      this.node.getCurrentNode(this.nodePreview.id).subscribe((res:any)=>{
+        console.log(res);
         this.updateNode=res;
+        // Utilisez les données préchargées dans le formulaire
         this.myForm.patchValue({
-          name: this.updateNode.entry.name,
-          properties:{
-          title: this.updateNode.entry.properties.title,
-          description: this.updateNode.entry.properties.description
-          }
+          name: res.entry.name,
+          title: res.entry.properties.title,
+          description: res.entry.properties.description
         });
       })
     }
+    
   
     onSubmit() {
       let nodeData: any = {

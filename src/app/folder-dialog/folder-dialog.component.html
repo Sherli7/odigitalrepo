@@ -1,33 +1,31 @@
-<mat-card>
+<mat-card class="update-folder-card">
   <mat-card-header>
-    <mat-card-title class="title">Nouveau dossier</mat-card-title>
+    <mat-card-title class="title">{{data.name}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="name-field">
         <mat-label>Nom</mat-label>
         <input matInput formControlName="name" required>
-        <mat-hint>Entrez le nom du dossier</mat-hint>
+        <!-- <mat-hint>Entrez le nom du dossier</mat-hint>
         <mat-error *ngIf="myForm.get('name')?.hasError('required')">
           Le nom est obligatoire.
-        </mat-error>
+        </mat-error> -->
       </mat-form-field>
       
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="title-field">
         <mat-label>Titre</mat-label>
         <input matInput formControlName="title">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field appearance="outline" class="title-textArea">
         <mat-label>Description</mat-label>
         <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
 
-      <!-- Les autres champs restent inchangés -->
-
       <div class="actions">
-        <button mat-raised-button [disabled]="!myForm.valid">Valider</button>
-        <button mat-button>Annuler</button>
+        <button mat-raised-button class="validBtn" [ngClass]="{'green': myForm.get('name')?.valid}" [disabled]="!myForm.valid">Valider</button>
+        <button mat-button (click)="cancel()">Annuler</button>
       </div>
     </form>
   </mat-card-content>

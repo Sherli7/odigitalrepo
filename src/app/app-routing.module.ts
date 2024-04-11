@@ -16,6 +16,7 @@ import { GroupeComponent } from './account/groupe/groupe.component';
 import { GeneralComponent } from './account/general/general.component';
 import { TrashcansComponent } from './account/trashcans/trashcans.component';
 import { UploadPopupComponent } from './modal/upload-popup/upload-popup.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -43,6 +44,10 @@ const routes: Routes = [
       {
         path: 'repository',
         component: RepositoryComponent
+      },
+      {
+        path: 'users',
+        component: UsersComponent
       },
       {
         path: 'trashcan',

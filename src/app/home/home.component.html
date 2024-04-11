@@ -1,0 +1,69 @@
+<mat-card class="card_style" *ngFor="let favorite of favorites">
+    <div *ngIf="favorite.entry.target.file?.isFile==true">
+      <mat-card-header>
+        <mat-card-title>{{ favorite.entry.target.file?.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p *ngIf="favorite.entry.target.file?.createdAt === favorite.entry.target.file?.modifiedAt">
+          Créé {{ getTimeDate(favorite.entry.target.file?.createdAt) }} par {{ favorite.entry.target.file?.createdByUser?.displayName }}</p>
+        <p *ngIf="favorite.entry.target.file?.createdAt !== favorite.entry.target.file?.modifiedAt">
+          Modifié {{ getTimeDate(favorite.entry.target.file?.modifiedAt) }} par {{ favorite.entry.target.file?.modifiedByUser?.displayName }}</p>
+      </mat-card-content>
+      <mat-card-actions class="actions">
+        <button mat-button (click)="previewFile(favorite.entry.target.file, favorite.entry.target.file?.name); $event.stopPropagation()">
+          <mat-icon>details</mat-icon> Détails
+        </button>
+        <button mat-button (click)="downloadFile(favorite.entry.target.file?.id, favorite.entry.target.file?.name); $event.stopPropagation()">
+          <mat-icon>download</mat-icon> Télécharger
+        </button>
+        <button mat-button (click)="trashcanAction(favorite.entry.target.file?.id, favorite.entry.target.file?.name, 'temporaire'); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+        <button mat-button (click)="openUpdateFolder(favorite.entry.target.file); $event.stopPropagation()">
+          <mat-icon>update</mat-icon> Update
+        </button>
+        <button mat-button (click)="$event.stopPropagation();OpenCommentpopup(favorite.entry.target.file?.id)"> 
+          <mat-icon>comment</mat-icon>Commentaires
+        </button>
+        <button mat-button click="$event.stopPropagation();unlikeDocument(favorite.entry.target.file.id)" *ngIf="favorite.entry.target.file?.isFile" color="warn">
+          <mat-icon color="warn">star</mat-icon> Favorite
+        </button>
+        <button mat-button (click)="versionHistory(favorite.entry.target.file?.id); OpenVersionpopup(favorite.entry.target.file?.id); $event.stopPropagation()">
+          <mat-icon>cloud_upload</mat-icon> Version history
+        </button>
+
+      </mat-card-actions>
+    </div>
+    <div *ngIf="favorite.entry.target.folder?.isFolder" (click)="findFavChildren(favorite.entry.target.folder.guid)">
+      <mat-card-header>
+        <mat-card-title>{{ favorite.entry.target.folder?.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card_subtitle">
+        <p *ngIf="favorite.entry.target.createdAt === favorite.entry.target.folder?.modifiedAt">
+          Créé {{ getTimeDate(favorite.entry.target.createdAt) }} par {{ favorite.entry.target.folder?.createdByUser?.displayName }}</p>
+        <p *ngIf="favorite.entry.target.createdAt !== favorite.entry.target.folder?.modifiedAt">
+          Modifié {{ getTimeDate(favorite.entry.target.folder?.modifiedAt) }} par {{ favorite.entry.target.folder?.modifiedByUser?.displayName }}</p>
+      </mat-card-content>
+      <mat-card-actions class="actions">
+        <button mat-button (click)="previewFile(favorite.entry.target.folder, favorite.entry.target.folder?.name); $event.stopPropagation()">
+          <mat-icon>details</mat-icon> Détails
+        </button>
+        <button mat-button (click)="downloadFilesAsZips(favorite.entry.target.folder?.id, favorite.entry.target.folder?.name); $event.stopPropagation()">
+          <mat-icon>download</mat-icon> Télécharger le zip
+        </button>
+        <button mat-button (click)="trashcanAction(favorite.entry.target.folder?.id, favorite.entry.target.folder?.name, 'temporaire'); $event.stopPropagation()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+        <button mat-button (click)="openUpdateFolder(favorite.entry.target.folder); $event.stopPropagation()">
+          <mat-icon>update</mat-icon> Update
+        </button>
+        <button mat-button (click)="$event.stopPropagation();OpenCommentpopup(favorite.entry.target.folder?.id)"> 
+          <mat-icon>comment</mat-icon>Commentaires
+        </button>
+        <button mat-button click="$event.stopPropagation();unlikeDocument(favorite.entry.target.folder?.id)" *ngIf="favorite.entry.target.folder?.isFolder" color="warn">
+            <mat-icon color="warn">star</mat-icon> Favorite
+          </button>
+      </mat-card-actions>
+    </div>
+  </mat-card>
+  

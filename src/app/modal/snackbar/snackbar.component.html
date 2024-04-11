@@ -1,8 +1,10 @@
 <div class="error-snackbar">
   <h1>Confirmation</h1>
   <div class="content">
-      <p>Voulez-vous supprimer {{data.arg1}} de manière {{data.action}}?</p>
-      <button mat-stroked-button class="button button2" (click)="permitDelete()">Supprimer</button>
-      <button mat-stroked-button class="button button3" (click)="onNoPermit()">Annuler</button>    
+      <p>Voulez-vous supprimer <span class="highlight">{{data.arg1}}</span> de manière <span class="highlight">{{data.action}}</span>?</p>
+      <div class="actions">
+        <button mat-stroked-button class="button delete" (click)="permitDelete()">Supprimer</button>
+        <button mat-stroked-button class="button cancel" (click)="onNoPermit()">Annuler</button>    
+      </div>
   </div>
 </div>

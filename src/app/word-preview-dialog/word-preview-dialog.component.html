@@ -1,7 +1,17 @@
+<!-- word-preview-dialog.component.html -->
+
 <div class="word-preview">
-    <h2>Informations sur le Fichier</h2>
-    <p><strong>Nom du fichier :</strong> {{ filename }}</p>
-    <p><strong>URL du fichier :</strong> {{ fileUrl }}</p>
-      <!-- Vous pouvez ajouter d'autres informations ici si nécessaire -->
+  <h2>Informations sur le Fichier</h2>
+  <div class="file-info">
+    <p><strong>Nom du fichier :</strong> {{ previewData.name }}</p>
+    <p><strong>Type MIME :</strong> {{ previewData.content.mimeTypeName }}</p>
+    <!-- Afficher la taille du fichier convertie en Mo ou Go -->
+    <p><strong>Taille :</strong> {{ formatFileSize(previewData.content.sizeInBytes) }}</p>
+    <p><strong>Date de création :</strong> {{ previewData.createdAt }}</p>
+    <p><strong>Dernière modification par :</strong> {{ previewData.modifiedByUser.displayName }}</p>
+    <!-- Afficher dynamiquement toutes les propriétés -->
+    <p *ngFor="let property of metadataFields">
+      <strong>{{ property.name }} :</strong> {{ property.value }}
+    </p>
   </div>
-  
+</div>

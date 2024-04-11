@@ -13,8 +13,6 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrl: './shared.component.scss'
 })
 export class SharedComponent extends AbstractRepositoryComponent {
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
   
   constructor(
@@ -24,9 +22,10 @@ export class SharedComponent extends AbstractRepositoryComponent {
     protected override auth: AuthServiceService,
     protected override router: Router,
     protected override cdr: ChangeDetectorRef,
-  ) {
-    super(sanitizer, dialog, nodeService, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
-  }
+    protected override authService:AuthServiceService
+    ) {
+      super(sanitizer, dialog, nodeService, auth, router, cdr,authService); // Appel du constructeur de la classe parente avec les arguments requis
+    }
 
   override ngOnInit(): void {
     super.ngOnInit(); // Assurez-vous d'appeler la méthode ngOnInit de la classe de base

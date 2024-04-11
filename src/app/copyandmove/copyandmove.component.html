@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="previous()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span class="toolbar-title">{{currentName}}</span>
+  <button mat-icon-button (click)="copyTo()" matTooltip="Coller ici">
+    <mat-icon>content_paste</mat-icon>
+  </button>
+  <button mat-icon-button (click)="moveTo()" matTooltip="Déplacer ici">
+    <mat-icon>move_to_inbox</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="list-container">
+  <mat-nav-list>
+    <ng-container *ngFor="let node of currentNode">
+      <!-- Utilisation de ng-container pour le *ngFor permet d'éviter les conflits avec *ngIf -->
+      <a mat-list-item *ngIf="node.entry.isFolder && !['Data Dictionary', 'Guest Home','IMAP Home','Imap Attachments','Sites'].includes(node.entry.name)" (click)="findChildren(node); selectNode(node)" class="folder-item">
+        <mat-icon matListIcon>folder</mat-icon>
+        {{ node.entry.name }}
+      </a>
+    </ng-container>
+  </mat-nav-list>
+   
+</div>

@@ -13,8 +13,6 @@ import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@ang
   styleUrls: ['./myfiles.component.scss']
 })
 export class MyfilesComponent extends AbstractRepositoryComponent implements OnInit {
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
   constructor(
     protected override sanitizer: DomSanitizer,
@@ -22,14 +20,14 @@ export class MyfilesComponent extends AbstractRepositoryComponent implements OnI
     protected override nodeService: NodeService,
     protected override auth: AuthServiceService,
     protected override router: Router,
-    protected override cdr: ChangeDetectorRef
+    protected override cdr: ChangeDetectorRef,
+    protected override authService:AuthServiceService
   ) {
-    super(sanitizer, dialog, nodeService, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
+    super(sanitizer, dialog, nodeService, auth, router, cdr,authService); // Appel du constructeur de la classe parente avec les arguments requis
   }
 
   override ngOnInit(): void {
     super.ngOnInit(); // Assurez-vous d'appeler la méthode ngOnInit de la classe de base
     this.showFolder();
-    
   }
 }

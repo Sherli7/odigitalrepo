@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Ajouter un Membre</h2>
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field appearance="fill">
+    <mat-label>Identifiant</mat-label>
+    <input matInput formControlName="id">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nom Affiché</mat-label>
+    <input matInput formControlName="displayName">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Type de Membre</mat-label>
+    <mat-select formControlName="memberType">
+      <mat-option value="PERSON">Personne</mat-option>
+      <mat-option value="GROUP">Groupe</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-button [disabled]="!form.valid" (click)="onSubmit()">Ajouter</button>
+</mat-dialog-actions>

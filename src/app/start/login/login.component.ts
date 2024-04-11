@@ -12,6 +12,7 @@ import { API } from '../../../environnement/environnement';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  currentYear?: number;
   hide = true;
   loginForm: FormGroup;
   showForm: boolean = true;
@@ -32,9 +33,10 @@ export class LoginComponent implements OnInit {
       userId: ['', Validators.required],
       password: ['', Validators.required]
     });
-  }
+  } 
   
   ngOnInit(): void {
+    this.currentYear = new Date().getFullYear();
     // Redirect to dashboard if already logged in
     if (this.authService.isAuthenticated()) {
       this.router.navigateByUrl('/dashboard/home');

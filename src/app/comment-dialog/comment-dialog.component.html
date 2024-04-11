@@ -1,16 +1,26 @@
-<cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-  <mat-card class="example-card" *cdkVirtualFor="let com of comment">
-    <mat-card-header>
-      <mat-card-subtitle>{{ com.entry.createdBy.firstName }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>{{ com.entry.content }}</mat-card-content>
-  </mat-card>
-</cdk-virtual-scroll-viewport>
-
-<form [formGroup]="myForm" (ngSubmit)="addComment()" class="custom-form">
-  <mat-form-field class="custom-form-field">
-    <mat-label>Vos observations</mat-label>
-    <textarea matInput formControlName="content" class="custom-textarea"></textarea>
-  </mat-form-field>
-  <button mat-raised-button class="custom-button" type="submit" [disabled]="myForm.invalid">valider</button>
-</form>
+<div class="chat-container" #container *ngIf="comments.length > 0; else noComments">
+  <div class="chat-messages">
+    <ng-container *ngFor="let comment of comments">
+      <div [ngClass]="getCommentClasses(comment)" [matMenuTriggerFor]="aboveMenu">
+        <span class="message-text">{{ comment.entry.content }} <mat-icon class="delMenu">more_vert</mat-icon></span><br>
+        <!-- Utilisation du pipe date avec le format date et heure -->
+        <span class="message-info">{{ comment.entry.createdBy.id }}, {{ comment.entry.createdAt | date: 'medium' }}</span>
+      </div>
+      <mat-menu #aboveMenu="matMenu"  class="matMenuBtn" yPosition="above">
+        <button mat-menu-item>
+          <mat-icon>delete</mat-icon>
+          <span>Supprimer</span>
+        </button>
+      </mat-menu>
+    </ng-container>
+  </div>
+  <div class="chat-input">
+    <form [formGroup]="myForm" (ngSubmit)="addComment()">
+      <input type="text" placeholder="Commentaire..." formControlName="content">
+      <button mat-raised-button type="submit">Envoyer</button>
+    </form>
+  </div>
+</div>
+<ng-template #noComments>
+  <p>Aucun commentaire disponible pour le moment.</p>
+</ng-template>

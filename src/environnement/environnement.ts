@@ -25,9 +25,6 @@ export const environment = {
     DOWNLOADVERSIONFILE:`${url}/api/-default-/public/alfresco/versions/1/nodes/`,
     SEARCHAPI:`${url}/api/-default-/public/search/versions/1/search`,
     TRASHCANAPI:`${url}/api/-default-/public/alfresco/versions/1/deleted-nodes`,
-    PEOPLE:`${url}/api/-default-/public/alfresco/versions/1/`,
-
-
-    
+    PEOPLE:`${url}/api/-default-/public/alfresco/versions/1`,    
   };
   

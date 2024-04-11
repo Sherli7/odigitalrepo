@@ -3,11 +3,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NodeService } from '../service/node.service';
 
 @Component({
-  selector: 'app-word-preview-dialog',
-  templateUrl: './word-preview-dialog.component.html',
-  styleUrls: ['./word-preview-dialog.component.scss']
+  selector: 'app-word-preview-fav-dialog',
+  templateUrl: './word-preview-fav-dialog.component.html',
+  styleUrl: './word-preview-fav-dialog.component.scss'
 })
-export class WordPreviewDialogComponent implements OnInit {
+export class WordPreviewFavDialogComponent {
   previewData: any;
   selectedNodeType: string = '';
   nodeType: any;

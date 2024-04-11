@@ -10,6 +10,8 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrl: './folder-dialog.component.scss'
 })
 export class FolderDialogComponent implements OnInit{
+
+
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
@@ -30,6 +32,9 @@ export class FolderDialogComponent implements OnInit{
       
   myForm!: FormGroup;
 
+  cancel() {
+    this.dialogRef.close();
+  }
 
   ngOnInit() {
     if (this.data && this.data.node) {

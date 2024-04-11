@@ -1,8 +1,8 @@
   <div class="login-container">
       <!-- <div class="login-content" [ngStyle]="{'background-image': 'url(../../../assets/img/maarch.jpg)'}"> -->
       <div class="login-form">
-        <img src="../../../assets/img/Odigital.png" alt="DIGITAL FLOW" class="maarchLogo">
-        <p class="product_name">DIGITAL FLOW</p>
+        <img src="../../../assets/img/Odigital.png" alt="E-DocFlow" class="maarchLogo">
+        <p class="product_name">E-DocFlow</p>
         <form [formGroup]="loginForm" (ngSubmit)="login()" >
           <div class="input-container">
             <mat-form-field class="input-row">
@@ -19,5 +19,7 @@
           <button type="submit" mat-stroked-button [disabled]="loginForm.invalid" class="connexion_button">Se connecter</button>
         </form>
       </div>
-      <mat-hint><a class="infoLogin">DIGITAL FLOW 2024, tous droits reservés</a></mat-hint>
+      <div class="copyright">
+        © E-DOCFLOW {{currentYear}}, tous droits réservés
+    </div>
     </div>

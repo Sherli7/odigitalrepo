@@ -11,21 +11,32 @@ import { API } from '../../environnement/environnement';
 export class AuthServiceService {
   private currentUserSubject: BehaviorSubject<string | null>;
   public currentUser: Observable<string | null>;
+  private isAdminSubject: BehaviorSubject<boolean>;
+  public isAdmin: Observable<boolean>;
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
     this.currentUser = this.currentUserSubject.asObservable();
+
+    // Initialiser isAdminSubject avec la valeur par défaut false
+    this.isAdminSubject = new BehaviorSubject<boolean>(false);
+    this.isAdmin = this.isAdminSubject.asObservable();
   }
 
   public get currentUserValue(): string | null {
     return this.currentUserSubject.value;
   }
 
+  updateIsAdmin(value: boolean): void {
+    this.isAdminSubject.next(value);
+  }
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
+    this.updateIsAdmin(false); // Réinitialisez isAdmin à false lors de la déconnexion
   }
 
   getToken() {
@@ -40,6 +51,11 @@ export class AuthServiceService {
           localStorage.setItem('token', res.entry.id);
           localStorage.setItem('userId', res.entry.userId);
           this.currentUserSubject.next(res.entry.id);
+          if (res.entry.userId == 'admin') {
+            this.updateIsAdmin(true);
+          } else {
+            this.updateIsAdmin(false);
+          }
           return res;
         }),
         catchError(error => {
@@ -68,4 +84,5 @@ export class AuthServiceService {
       })
     );
   }
+  
 }

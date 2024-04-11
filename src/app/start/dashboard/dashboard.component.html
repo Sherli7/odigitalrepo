@@ -17,6 +17,10 @@
       <span class="material-icons">share</span>
       <span>Shared</span>
   </div>
+  <div *ngIf="auth.isAdmin" class="sidebar-item" routerLink="/dashboard/users" (click)="changeRoot()">
+    <span class="material-icons">people</span>
+    <span>Users</span>
+  </div>
   <div class="sidebar-item" routerLink="/dashboard/trashcan" (click)="changeRoot()">
     <span class="material-icons">recycling</span>
     <span>Trash</span>
@@ -37,13 +41,13 @@
       <input type="text"
              placeholder="Search..."
              [matAutocomplete]="auto"
-             (input)="onSearchInput($event)"
+             (input)="performSearch($event)"
              [formControl]="searchControl">
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let result of searchResults" [value]="result.entry.name">
           {{ result.entry.name }}
         </mat-option>
-      </mat-autocomplete>
+      </mat-autocomplete> 
       <button class="button" (click)="OpenFolderFormPopup()"><span class="material-icons">add</span>Add New</button>
       <button class="button" (click)="OpenUploadPopup()"><span class="material-icons">file_upload</span>Upload</button>
     </div>

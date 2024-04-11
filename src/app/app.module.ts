@@ -43,6 +43,10 @@ import { TrashcansComponent } from './account/trashcans/trashcans.component';
 registerLocaleData(fr.default);
 import * as fr from '@angular/common/locales/fr';
 import { UpdateFolderComponent } from './folder-dialog/update-folder/update-folder.component';
+import { WordPreviewFavDialogComponent } from './word-preview-fav-dialog/word-preview-fav-dialog.component';
+import { CopyandmoveComponent } from './copyandmove/copyandmove.component';
+import { UsersComponent } from './users/users.component';
+import { AddMemberDialogComponentComponent } from './users/add-member-dialog-component/add-member-dialog-component.component';
 
 
 export const MY_DATE_FORMATS = {
@@ -83,7 +87,11 @@ export const MY_DATE_FORMATS = {
     GroupeComponent,
     GeneralComponent,
     TrashcansComponent,
-    UpdateFolderComponent
+    UpdateFolderComponent,
+    WordPreviewFavDialogComponent,
+    CopyandmoveComponent,
+    UsersComponent,
+    AddMemberDialogComponentComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [

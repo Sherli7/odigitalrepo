@@ -24,7 +24,7 @@ showTrashFolder(): void {
   const relativePath = localStorage.getItem('relativePath');
   // Determine the node parameter based on the existence of relativePath
   const nodeParam = relativePath ? '&relativePath=' + relativePath : '';
-  this.nodeService.getSpecificNode(nodeParam).subscribe(
+  this.nodeService.getDeleteNode().subscribe(
     (data: any) => {
       this.currentNode = data['list'].entries;
       this.count = data['list'].pagination;
@@ -46,9 +46,6 @@ showTrashFolder(): void {
     }
   );
 }
-
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   messagerror!: string;
   
   constructor( private datePipe: DatePipe,
@@ -58,10 +55,11 @@ showTrashFolder(): void {
     protected override auth: AuthServiceService,
     protected override router: Router,
     protected override cdr: ChangeDetectorRef,
-    public _snackbar:CustumSnackbarService
-  ) {
-    super(sanitizer, dialog, node, auth, router, cdr); // Appel du constructeur de la classe parente avec les arguments requis
-  }
+    public _snackbar:CustumSnackbarService,
+    protected override authService:AuthServiceService
+    ) {
+      super(sanitizer, dialog, node, auth, router, cdr,authService); // Appel du constructeur de la classe parente avec les arguments requis
+    }
 
   override ngOnInit(): void {
     super.ngOnInit(); // Call to ngOnInit of AbstractRepositoryComponent if it's implemented
